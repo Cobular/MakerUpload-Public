@@ -18,8 +18,9 @@ const PUT = (async (
     return new Response("No body", { status: 400 });
 
   const uuid = uuidv4();
+  console.log("UUID", uuid)
   const resp = await env.FILE_CACHE_BUCKET.put(uuid, request.body);
-  return new Response(`Uploaded to ${uuid}`, { status: 200 });
+  return new Response(`Upload success`, { status: 200 });
 }) satisfies RouteHandler;
 
 const GET = (async (
