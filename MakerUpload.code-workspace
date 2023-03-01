@@ -13,6 +13,10 @@
 			"name": "Host"
 		},
 		{
+			"path": "./firebase",
+			"name": "firebase"
+		},
+		{
 			"path": ".",
 			"name": "Root"
 		},
