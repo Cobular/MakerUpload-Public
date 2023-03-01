@@ -1,0 +1,21 @@
+{
+	"folders": [
+		{
+			"path": "./cf-worker",
+			"name": "Cloudflare Worker"
+		},
+		{
+			"path": "./client",
+			"name": "Client"
+		},
+		{
+			"path": "./host",
+			"name": "Host"
+		},
+		{
+			"path": ".",
+			"name": "Root"
+		},
+	],
+	"settings": {}
+}
