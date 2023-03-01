@@ -13,6 +13,9 @@ export interface Env {
   //
   // Example binding to a Service. Learn more at https://developers.cloudflare.com/workers/runtime-apis/service-bindings/
   // MY_SERVICE: Fetcher;
+
+  FIREBASE_PROJECT_ID: string;
+  FIREBASE_SERVICE_ACCT_JSON: string;
 }
 
 export default {

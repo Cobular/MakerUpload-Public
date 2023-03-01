@@ -6,3 +6,6 @@ compatibility_date = "2023-03-01"
 binding = 'FILE_CACHE_BUCKET'
 bucket_name = 'makerspace-file-cache-bucket'
 preview_bucket_name = "preview-makerspace-file-cache-bucket"
+
+[vars]
+FIREBASE_PROJECT_ID = "makersync-eef57"

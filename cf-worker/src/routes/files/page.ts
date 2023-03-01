@@ -1,7 +1,7 @@
 import { Env } from "../..";
 import { IsTargetMachine, RouteHandler } from "../../types";
-import { v4 as uuidv4 } from 'uuid';
-
+import { v4 as uuidv4 } from "uuid";
+import { FirestoreInterface } from "../../libs/firestore";
 
 const PUT = (async (
   url: URL,
@@ -14,13 +14,26 @@ const PUT = (async (
   if (!IsTargetMachine(target_machine))
     return new Response("Invalid target_machine", { status: 400 });
 
-  if (request.body === null)
-    return new Response("No body", { status: 400 });
+  if (request.body === null) return new Response("No body", { status: 400 });
+
+  const firestore = await FirestoreInterface.New(env.FIREBASE_PROJECT_ID, env.FIREBASE_SERVICE_ACCT_JSON);
 
   const uuid = uuidv4();
-  console.log("UUID", uuid)
-  const resp = await env.FILE_CACHE_BUCKET.put(uuid, request.body);
-  return new Response(`Upload success`, { status: 200 });
+  console.log("UUID", uuid);
+  try {
+    const resp = await env.FILE_CACHE_BUCKET.put(uuid, request.body);
+    const firestore_resp = await firestore.addDocumentInCollection("files", {
+      download_url: `https://cf-worker.cobular.workers.dev/files?uuid=${uuid}`,
+      creation_time: new Date(),
+      target_machine: target_machine,
+    });
+
+    return new Response(`Upload success`, { status: 200 });
+  } catch (e) {
+    console.error(e)
+    return new Response(`Upload failed\n${e}`, { status: 500 });
+  }
+  
 }) satisfies RouteHandler;
 
 const GET = (async (
@@ -29,24 +42,16 @@ const GET = (async (
   env: Env,
   ctx: ExecutionContext
 ): Promise<Response> => {
-  console.log("GET")
-  const target_machine = url.searchParams.get("target_machine");
-
-  if (!IsTargetMachine(target_machine))
-    return new Response("Invalid target_machine", { status: 400 });
-
   const uuid = url.searchParams.get("uuid");
 
-  if (uuid === null)
-    return new Response("No uuid", { status: 400 });
+  if (uuid === null) return new Response("No uuid", { status: 400 });
 
   const object = await env.FILE_CACHE_BUCKET.get(uuid);
-  if (object === null)
-    return new Response("Object not found", { status: 404 });
+  if (object === null) return new Response("Object not found", { status: 404 });
 
   const headers = new Headers();
   object.writeHttpMetadata(headers);
-  headers.set('etag', object.httpEtag);
+  headers.set("etag", object.httpEtag);
 
   return new Response(object.body, { status: 200 });
 }) satisfies RouteHandler;
@@ -59,17 +64,14 @@ const DELETE = (async (
 ): Promise<Response> => {
   const uuid = url.searchParams.get("uuid");
 
-  if (uuid === null)
-    return new Response("No uuid", { status: 400 });
+  if (uuid === null) return new Response("No uuid", { status: 400 });
 
   const object = await env.FILE_CACHE_BUCKET.get(uuid);
-  if (object === null)
-    return new Response("Object not found", { status: 404 });
+  if (object === null) return new Response("Object not found", { status: 404 });
 
   await env.FILE_CACHE_BUCKET.delete(uuid);
   return new Response("Deleted", { status: 200 });
 }) satisfies RouteHandler;
-
 
 export const Files = (async (
   url: URL,
@@ -88,7 +90,7 @@ export const Files = (async (
       return new Response(`${request.method} is not allowed.`, {
         status: 405,
         headers: {
-          Allow: 'PUT',
+          Allow: "PUT",
         },
       });
   }

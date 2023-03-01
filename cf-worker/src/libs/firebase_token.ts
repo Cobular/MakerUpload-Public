@@ -2,15 +2,11 @@ import { getTokenFromGCPServiceAccount } from '@sagi.io/workers-jwt'
 import { IsJWT, JWT } from '../types'
 
 
-/**
-* Getting the access token to use in the header.
-*/
-
 // For example's sake, the file contents (modified) from the private key has been 
 // listed below, but the recommended way would be to use environment variables.
-export async function getAccessToken(): Promise<JWT> {
+export async function getAccessToken(auth_json: string): Promise<JWT> {
   const jwtToken = await getTokenFromGCPServiceAccount({
-    serviceAccountJSON: JSON.parse(FIREBASE_SERVICE_ACCT_JSON),
+    serviceAccountJSON: JSON.parse(auth_json),
     aud: 'https://oauth2.googleapis.com/token',
     payloadAdditions: {
       scope: [
