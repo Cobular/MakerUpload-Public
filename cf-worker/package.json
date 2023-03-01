@@ -12,5 +12,10 @@
     "start": "wrangler dev",
     "deploy": "wrangler publish",
     "test": "vitest"
+  },
+  "dependencies": {
+    "@types/uuid": "^9.0.1",
+    "firebase-admin": "^11.5.0",
+    "uuid": "^9.0.0"
   }
 }
