@@ -3,3 +3,4 @@ packages:
   - 'host'
   - 'client'
   - 'cf-worker'
+  - 'types'

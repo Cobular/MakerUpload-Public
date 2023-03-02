@@ -21,12 +21,14 @@ const PUT = (async (
   const uuid = uuidv4();
   console.log("UUID", uuid);
   try {
-    const resp = await env.FILE_CACHE_BUCKET.put(uuid, request.body);
     const firestore_resp = await firestore.addDocumentInCollection("files", {
       download_url: `https://cf-worker.cobular.workers.dev/files?uuid=${uuid}`,
       creation_time: new Date(),
       target_machine: target_machine,
+      uid: uuid,
+      name: "Test File.png",
     });
+    const resp = await env.FILE_CACHE_BUCKET.put(uuid, request.body);
 
     return new Response(`Upload success`, { status: 200 });
   } catch (e) {

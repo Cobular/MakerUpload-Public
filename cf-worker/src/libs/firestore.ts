@@ -5,6 +5,8 @@ export interface DocumentData {
   creation_time: Date;
   download_url: string;
   target_machine: TargetMachine;
+  name: string;
+  uid: string;
 }
 
 export interface RawDocumentData {
@@ -17,6 +19,12 @@ export interface RawDocumentData {
   target_machine: {
     stringValue: TargetMachine;
   };
+  uid: {
+    stringValue: string;
+  };
+  name: {
+    stringValue: string;
+  }
 }
 export interface FirestoreDocument {
   name: string;
@@ -143,7 +151,7 @@ export class FirestoreInterface {
    */
   async addDocumentInCollection(
     collection_name: string,
-    { download_url, target_machine, creation_time = new Date() }: DocumentData
+    { download_url, target_machine, creation_time = new Date(), uid, name }: DocumentData
   ) {
     const body: RawDocumentData = {
       creation_time: {
@@ -155,6 +163,12 @@ export class FirestoreInterface {
       target_machine: {
         stringValue: target_machine,
       },
+      uid: {
+        stringValue: uid,
+      },
+      name: {
+        stringValue: name,
+      }
     };
 
     const fetch_res = await fetch(
@@ -165,7 +179,7 @@ export class FirestoreInterface {
           Authorization: "Bearer " + this.accessToken,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(body),
+        body: JSON.stringify({fields: body}),
       }
     );
 
