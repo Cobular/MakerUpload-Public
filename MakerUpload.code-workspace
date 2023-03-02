@@ -17,6 +17,10 @@
 			"name": "firebase"
 		},
 		{
+			"path": "./makersync-common",
+			"name": "common"
+		},
+		{
 			"path": ".",
 			"name": "Root"
 		},

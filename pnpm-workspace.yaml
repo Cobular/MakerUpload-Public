@@ -3,4 +3,4 @@ packages:
   - 'host'
   - 'client'
   - 'cf-worker'
-  - 'types'
+  - 'makersync-common'

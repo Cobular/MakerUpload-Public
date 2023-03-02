@@ -1,27 +1,13 @@
 lockfileVersion: 5.4
 
-overrides:
-  rxfire>tslib: '2'
-
 importers:
-
-  .:
-    specifiers:
-      esbuild: ^0.17.10
-      rollup: ^3.18.0
-      rollup-plugin-dts: ^5.2.0
-      rollup-plugin-esbuild: ^5.0.0
-    devDependencies:
-      esbuild: 0.17.10
-      rollup: 3.18.0
-      rollup-plugin-dts: 5.2.0_fn2onl6nbsljlgjr3jlzr6w7we
-      rollup-plugin-esbuild: 5.0.0_dbrhudysbry42vgi46qoinmtca
 
   cf-worker:
     specifiers:
       '@cloudflare/workers-types': ^4.20230228.0
       '@sagi.io/workers-jwt': ^0.0.23
       '@types/uuid': ^9.0.1
+      makersync-common: workspace:*
       typescript: ^4.9.3
       uuid: ^9.0.0
       vitest: ^0.29.2
@@ -29,6 +15,7 @@ importers:
     dependencies:
       '@sagi.io/workers-jwt': 0.0.23
       '@types/uuid': 9.0.1
+      makersync-common: link:../makersync-common
       uuid: 9.0.0
     devDependencies:
       '@cloudflare/workers-types': 4.20230228.0
@@ -48,6 +35,7 @@ importers:
       eslint-config-prettier: ^8.5.0
       eslint-plugin-svelte3: ^4.0.0
       firebase: ^9.17.1
+      makersync-common: workspace:*
       postcss: ^8.4.14
       postcss-load-config: ^4.0.1
       prettier: ^2.8.0
@@ -75,6 +63,7 @@ importers:
       eslint: 8.35.0
       eslint-config-prettier: 8.6.0_eslint@8.35.0
       eslint-plugin-svelte3: 4.0.0_n4ieifq2d7jq3sqoe474cgqlim
+      makersync-common: link:../makersync-common
       postcss: 8.4.21
       postcss-load-config: 4.0.1_postcss@8.4.21
       prettier: 2.8.4
@@ -101,6 +90,7 @@ importers:
       eslint-config-prettier: ^8.5.0
       eslint-plugin-svelte3: ^4.0.0
       firebase: ^9.17.1
+      makersync-common: workspace:*
       npm-run-all: ^4.1.5
       postcss: ^8.4.14
       postcss-load-config: ^4.0.1
@@ -127,6 +117,7 @@ importers:
       eslint: 8.35.0
       eslint-config-prettier: 8.6.0_eslint@8.35.0
       eslint-plugin-svelte3: 4.0.0_n4ieifq2d7jq3sqoe474cgqlim
+      makersync-common: link:../makersync-common
       npm-run-all: 4.1.5
       postcss: 8.4.21
       postcss-load-config: 4.0.1_postcss@8.4.21
@@ -139,6 +130,18 @@ importers:
       tslib: 2.5.0
       typescript: 4.9.5
       vite: 4.1.4
+
+  makersync-common:
+    specifiers:
+      esbuild: ^0.17.10
+      rollup: ^3.18.0
+      rollup-plugin-dts: ^5.2.0
+      rollup-plugin-esbuild: ^5.0.0
+    devDependencies:
+      esbuild: 0.17.10
+      rollup: 3.18.0
+      rollup-plugin-dts: 5.2.0_fn2onl6nbsljlgjr3jlzr6w7we
+      rollup-plugin-esbuild: 5.0.0_dbrhudysbry42vgi46qoinmtca
 
 packages:
 
@@ -4054,14 +4057,6 @@ packages:
       estree-walker: 0.6.1
     dev: true
 
-  /rollup/3.17.3:
-    resolution: {integrity: sha512-p5LaCXiiOL/wrOkj8djsIDFmyU9ysUxcyW+EKRLHb6TKldJzXpImjcRSR+vgo09DBdofGcOoLOsRyxxG2n5/qQ==}
-    engines: {node: '>=14.18.0', npm: '>=8.0.0'}
-    hasBin: true
-    optionalDependencies:
-      fsevents: 2.3.2
-    dev: true
-
   /rollup/3.18.0:
     resolution: {integrity: sha512-J8C6VfEBjkvYPESMQYxKHxNOh4A5a3FlP+0BETGo34HEcE4eTlgCrO2+eWzlu2a/sHs2QUkZco+wscH7jhhgWg==}
     engines: {node: '>=14.18.0', npm: '>=8.0.0'}
@@ -4084,7 +4079,7 @@ packages:
     dependencies:
       firebase: 9.17.1
       rxjs: 7.8.0
-      tslib: 2.5.0
+      tslib: 1.14.1
     dev: false
 
   /rxjs/7.8.0:
@@ -4632,7 +4627,6 @@ packages:
 
   /tslib/1.14.1:
     resolution: {integrity: sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==}
-    dev: true
 
   /tslib/2.5.0:
     resolution: {integrity: sha512-336iVw3rtn2BUK7ORdIAHTyxHGRIHVReokCR3XjbckJMK7ms8FysBfhLR8IXnAgy7T0PTPNBWKiH514FOW/WSg==}
@@ -4791,7 +4785,7 @@ packages:
       esbuild: 0.16.17
       postcss: 8.4.21
       resolve: 1.22.1
-      rollup: 3.17.3
+      rollup: 3.18.0
     optionalDependencies:
       fsevents: 2.3.2
     dev: true
@@ -4825,7 +4819,7 @@ packages:
       esbuild: 0.16.17
       postcss: 8.4.21
       resolve: 1.22.1
-      rollup: 3.17.3
+      rollup: 3.18.0
     optionalDependencies:
       fsevents: 2.3.2
     dev: true

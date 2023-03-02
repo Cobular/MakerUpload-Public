@@ -1,7 +1,8 @@
 import { Env } from "../..";
-import { IsTargetMachine, RouteHandler } from "../../types";
+import { RouteHandler } from "../../types";
 import { v4 as uuidv4 } from "uuid";
 import { FirestoreInterface } from "../../libs/firestore";
+import { IsTargetMachine } from "makersync-common";
 
 const PUT = (async (
   url: URL,
@@ -16,7 +17,10 @@ const PUT = (async (
 
   if (request.body === null) return new Response("No body", { status: 400 });
 
-  const firestore = await FirestoreInterface.New(env.FIREBASE_PROJECT_ID, env.FIREBASE_SERVICE_ACCT_JSON);
+  const firestore = await FirestoreInterface.New(
+    env.FIREBASE_PROJECT_ID,
+    env.FIREBASE_SERVICE_ACCT_JSON
+  );
 
   const uuid = uuidv4();
   console.log("UUID", uuid);
@@ -30,12 +34,14 @@ const PUT = (async (
     });
     const resp = await env.FILE_CACHE_BUCKET.put(uuid, request.body);
 
-    return new Response(`Upload success`, { status: 200 });
+    const response = new Response(`Upload success`, { status: 200 });
+    response.headers.set("Access-Control-Allow-Origin", "*")
+
+    return response;
   } catch (e) {
-    console.error(e)
+    console.error(e);
     return new Response(`Upload failed\n${e}`, { status: 500 });
   }
-  
 }) satisfies RouteHandler;
 
 const GET = (async (
@@ -55,7 +61,11 @@ const GET = (async (
   object.writeHttpMetadata(headers);
   headers.set("etag", object.httpEtag);
 
-  return new Response(object.body, { status: 200 });
+
+  const response = new Response(object.body, { status: 200 });
+  response.headers.set("Access-Control-Allow-Origin", "*")
+
+  return response;
 }) satisfies RouteHandler;
 
 const DELETE = (async (
@@ -75,6 +85,27 @@ const DELETE = (async (
   return new Response("Deleted", { status: 200 });
 }) satisfies RouteHandler;
 
+const OPTIONS = (async (
+  url: URL,
+  request: Request,
+  env: Env,
+  ctx: ExecutionContext
+): Promise<Response> => {
+  const response = new Response(null);
+
+  response.headers.set("Access-Control-Allow-Origin", "*");
+  response.headers.set("Access-Control-Allow-Methods", "GET,PUT,DELETE,OPTIONS");
+  response.headers.set("Access-Control-Max-Age", "86400");
+
+  const requestHeaders = request.headers.get("Access-Control-Request-Headers");
+
+  if (requestHeaders !== null) {
+    response.headers.set("Access-Control-Allow-Headers", requestHeaders);
+  }
+
+  return response
+}) satisfies RouteHandler;
+
 export const Files = (async (
   url: URL,
   request: Request,
@@ -88,6 +119,8 @@ export const Files = (async (
       return GET(url, request, env, ctx);
     case "DELETE":
       return DELETE(url, request, env, ctx);
+    case "OPTIONS":
+      return OPTIONS(url, request, env, ctx);
     default:
       return new Response(`${request.method} is not allowed.`, {
         status: 405,

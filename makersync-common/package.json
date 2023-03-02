@@ -1,0 +1,17 @@
+{
+  "name": "makersync-common",
+  "version": "0.0.1",
+  "main": "dist/makersync-common.js",
+  "module": "dist/makersync-common.mjs",
+  "typings": "dist/makersync-common.d.ts",
+  "devDependencies": {
+    "esbuild": "^0.17.10",
+    "rollup": "^3.18.0",
+    "rollup-plugin-dts": "^5.2.0",
+    "rollup-plugin-esbuild": "^5.0.0"
+  },
+  "scripts": {
+    "build": "rollup -c",
+    "dev": "rollup -c -w"
+  }
+}
