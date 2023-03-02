@@ -1,8 +1,22 @@
 name = "cron-worker"
 compatibility_date = "2023-03-02"
-
+main = "src/index.ts"
 
 [triggers]
 # every 5 minutes
-cron = ["*/5 * * * *"]
+crons = ["*/5 * * * *"]
 
+
+[[r2_buckets]]
+binding = 'FILE_CACHE_BUCKET'
+bucket_name = 'makerspace-file-cache-bucket'
+preview_bucket_name = "makerspace-file-cache-bucket"
+
+[[r2_buckets]]
+binding = 'PREVIEW_FILE_CACHE_BUCKET'
+bucket_name = 'preview-makerspace-file-cache-bucket'
+preview_bucket_name = "preview-makerspace-file-cache-bucket"
+
+
+[vars]
+FIREBASE_PROJECT_ID = "makersync-eef57"

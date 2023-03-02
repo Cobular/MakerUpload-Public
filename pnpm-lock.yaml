@@ -5,7 +5,6 @@ importers:
   cf-worker:
     specifiers:
       '@cloudflare/workers-types': ^4.20230228.0
-      '@sagi.io/workers-jwt': ^0.0.23
       '@types/uuid': ^9.0.1
       makersync-common: workspace:*
       typescript: ^4.9.3
@@ -13,7 +12,6 @@ importers:
       vitest: ^0.29.2
       wrangler: 2.12.0
     dependencies:
-      '@sagi.io/workers-jwt': 0.0.23
       '@types/uuid': 9.0.1
       makersync-common: link:../makersync-common
       uuid: 9.0.0
@@ -79,9 +77,12 @@ importers:
   cron-worker:
     specifiers:
       '@cloudflare/workers-types': ^4.20230228.0
+      makersync-common: workspace:*
       typescript: ^4.9.3
       vitest: ^0.29.2
       wrangler: ^2.12.0
+    dependencies:
+      makersync-common: link:../makersync-common
     devDependencies:
       '@cloudflare/workers-types': 4.20230228.0
       typescript: 4.9.5
