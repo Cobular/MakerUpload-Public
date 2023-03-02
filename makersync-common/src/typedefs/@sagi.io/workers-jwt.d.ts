@@ -1,5 +1,5 @@
 declare module "@sagi.io/workers-jwt" {
-  export async function getTokenFromGCPServiceAccount(options: {
+  export function getTokenFromGCPServiceAccount(options: {
     serviceAccountJSON: Record<string, any>;
     aud: string;
     alg?: string;

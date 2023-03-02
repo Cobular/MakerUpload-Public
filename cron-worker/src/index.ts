@@ -27,7 +27,7 @@ export default {
 		env: Env,
 		ctx: ExecutionContext
 	): Promise<void> {
-		// Get a list of all firebase things older than one minute old
+		// Get a list of all entries in firebase older than 2 minutes
 		console.log(`Hello World!`);
 	},
 };

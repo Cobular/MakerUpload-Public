@@ -145,10 +145,13 @@ importers:
 
   makersync-common:
     specifiers:
+      '@sagi.io/workers-jwt': ^0.0.23
       esbuild: ^0.17.10
       rollup: ^3.18.0
       rollup-plugin-dts: ^5.2.0
       rollup-plugin-esbuild: ^5.0.0
+    dependencies:
+      '@sagi.io/workers-jwt': 0.0.23
     devDependencies:
       esbuild: 0.17.10
       rollup: 3.18.0

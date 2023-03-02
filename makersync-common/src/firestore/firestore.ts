@@ -1,5 +1,5 @@
+import { DocumentData, FirestoreDocument, IsFirestoreDocument, IsFirestoreDocumentList, RawDocumentData } from "../types/index";
 import { getAccessToken } from "./firebase_token";
-import { DocumentData, RawDocumentData, FirestoreDocument, IsFirestoreDocumentList, IsFirestoreDocument } from "makersync-common";
 
 /**
  * Get all documents in a collection

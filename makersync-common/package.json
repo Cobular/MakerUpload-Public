@@ -4,6 +4,33 @@
   "main": "dist/makersync-common.js",
   "module": "dist/makersync-common.mjs",
   "typings": "dist/makersync-common.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/makersync-common.mjs",
+      "require": "./dist/makersync-common.js"
+    },
+    "./firestore": {
+      "import": "./dist/firestore/firestore.mjs",
+      "require": "./dist/firestore/firestore.js"
+    },
+    "./types": {
+      "import": "./dist/types/types.mjs",
+      "require": "./dist/types/types.js"
+    }
+  },
+  "typesVersions": {
+    "*": {
+      ".": [
+        "dist/makersync-common.d.ts"
+      ],
+      "firestore": [
+        "dist/firestore/firestore.d.ts"
+      ],
+      "types": [
+        "dist/types/types.d.ts"
+      ]
+    }
+  },
   "devDependencies": {
     "esbuild": "^0.17.10",
     "rollup": "^3.18.0",
@@ -13,5 +40,8 @@
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -c -w"
+  },
+  "dependencies": {
+    "@sagi.io/workers-jwt": "^0.0.23"
   }
 }

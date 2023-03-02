@@ -1,6 +1,13 @@
 import { getTokenFromGCPServiceAccount } from '@sagi.io/workers-jwt'
-import { IsJWT, JWT } from '../types'
 
+
+export interface JWT {
+  access_token: string;
+}
+
+export function IsJWT(value: unknown): value is JWT {
+  return typeof value === "object" && value !== null && "access_token" in value;
+}
 
 // For example's sake, the file contents (modified) from the private key has been 
 // listed below, but the recommended way would be to use environment variables.

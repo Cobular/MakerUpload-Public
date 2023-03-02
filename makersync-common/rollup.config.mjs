@@ -5,31 +5,56 @@ const name = pkg.main.replace(/\.js$/, '')
 
 const bundle = config => ({
   ...config,
-  input: 'src/index.ts',
   external: id => !/^[./]/.test(id),
 })
 
-export default [
-  bundle({
-    plugins: [esbuild()],
-    output: [
-      {
-        file: `${name}.js`,
-        format: 'cjs',
-        sourcemap: true,
-      },
-      {
-        file: `${name}.mjs`,
+const input_paths = [{
+  path: "",
+  name: `${name}`
+}, {
+  path: "firestore",
+  name: `firestore`
+}, {
+  path: "types",
+  name: `types`
+}]
+
+const bundles = input_paths.reduce((acc, { path, name }) => {
+  let input_path = `src/${path}/index.ts`
+  let output_base = `dist/${path}/${name}`
+  if (path === "") {
+    // input_path = 'src/index.ts'
+    output_base = name
+  }
+  console.log(input_path)
+  return acc.concat([
+    bundle({
+      input: input_path,
+      plugins: [esbuild()],
+      output: [
+        {
+          file: `${output_base}.js`,
+          format: 'cjs',
+          sourcemap: true,
+        },
+        {
+          file: `${output_base}.mjs`,
+          format: 'es',
+          sourcemap: true,
+        },
+      ],
+    }),
+    bundle({
+      input: input_path,
+      plugins: [dts()],
+      output: {
+        file: `${output_base}.d.ts`,
         format: 'es',
-        sourcemap: true,
       },
-    ],
-  }),
-  bundle({
-    plugins: [dts()],
-    output: {
-      file: `${name}.d.ts`,
-      format: 'es',
-    },
-  }),
-]
+    }),
+  ])
+
+}, [])
+
+
+export default bundles

@@ -1,8 +1,8 @@
 import { Env } from "../..";
 import { RouteHandler } from "../../types";
 import { v4 as uuidv4 } from "uuid";
-import { FirestoreInterface } from "../../libs/firestore";
-import { IsTargetMachine } from "makersync-common";
+import { FirestoreInterface } from "makersync-common/firestore";
+import { IsTargetMachine } from "makersync-common/types";
 
 const PUT = (async (
   url: URL,
