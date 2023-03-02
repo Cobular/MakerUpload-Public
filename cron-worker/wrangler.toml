@@ -1,0 +1,8 @@
+name = "cron-worker"
+compatibility_date = "2023-03-02"
+
+
+[triggers]
+# every 5 minutes
+cron = ["*/5 * * * *"]
+
