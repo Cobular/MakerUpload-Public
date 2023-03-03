@@ -1,4 +1,7 @@
 <script lang="ts">
+	import FileSelect from '../lib/components/FileSelect.svelte';
+	import StepCounter from '../lib/components/StepCounter.svelte';
+
 	let file: HTMLInputElement;
 
 	let list: HTMLUListElement;
@@ -64,12 +67,19 @@
 	}
 </script>
 
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<div class="hero min-h-screen">
+	<div class="hero-content text-center">
+		<div class="max-w-3xl">
+			<h1 class="text-5xl font-bold">MakerSync</h1>
+			<p class="py-6 pb-10">Upload files below</p>
 
-<form on:submit|preventDefault={handleSubmit}>
-	<input bind:this={file} type="file" name="file" />
-	<button type="submit">Submit</button>
-</form>
+			<div class="card bg-base-100 shadow-xl m-5">
+				<div class="card-body max-w-sm w-screen">
+					<StepCounter step={1} />
 
-<ul bind:this={list} />
+					<FileSelect />
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
