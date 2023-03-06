@@ -1,5 +1,7 @@
 <script lang="ts">
-	export let on_file_choose: (file: File) => void;
+	import { createEventDispatcher } from 'svelte';
+
+	const dispatch = createEventDispatcher<{file_choose: {file: File}}>();
 
 	let file_input: HTMLInputElement;
 
@@ -11,7 +13,7 @@
 		}
 
 		for (const file of files) {
-			on_file_choose(file);
+			dispatch('file_choose', {file});
 		}
 	}
 </script>
@@ -20,7 +22,7 @@
 	<input
 		class="file-input file-input-info w-80"
 		bind:this={file_input}
-		on:select|preventDefault={handle_file_select}
+		on:input={handle_file_select}
 		type="file"
 		name="file"
 	/>

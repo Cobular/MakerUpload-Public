@@ -1,30 +1,35 @@
 <script lang="ts">
-
-
-
-	export let on_select_choose: (room: Label) => void;
+	import { type TargetMachine, IsTargetMachine, target_machines } from 'makersync-common/types';
+	import { createEventDispatcher } from 'svelte';
 
 	let select_input: HTMLSelectElement;
 
-	function handle_file_select(event: Event) {
-		const files = select_input.selectedOptions;
+	const dispatch = createEventDispatcher<{ select_choose: { machine: TargetMachine } }>();
 
-		if (files === null) {
+	function handle_select(event: Event) {
+		const selected_options = select_input.selectedOptions;
+
+		if (selected_options === null) {
 			return;
 		}
 
-		for (const file of files) {
-			on_file_choose(file);
+		for (const option of selected_options) {
+			const name = option.id;
+			console.log(`Selected "${name}"`)
+			if (IsTargetMachine(name)) {
+				dispatch('select_choose', { machine: name });
+			} else {
+				throw new Error('Invalid machine name: ' + name);
+			}
 		}
 	}
 </script>
 
 <form class="flex flex-col gap-5 items-center">
-  <select class="select select-info w-80" bind:this={select_input}>
-    <option disabled selected>Select a Room</option>
-    
-    <option>3D Printing</option>
-    <option>Sewing</option>
-    <option>Laptops</option>
-  </select>
+	<select class="select select-info w-80" bind:this={select_input} on:input|preventDefault={handle_select}>
+		<option disabled selected>Select a Room</option>
+		{#each target_machines as machine}
+			<option id={machine}>{machine}</option>
+		{/each}
+	</select>
 </form>

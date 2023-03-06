@@ -1,6 +1,6 @@
 export * from "./firestore"
 
-const target_machines = ["3DPrinter", "Sewing"] as const;
+export const target_machines = ["3DPrinter", "Sewing"] as const;
 
 export type TargetMachine = (typeof target_machines)[number];
 

@@ -1,69 +1,27 @@
 <script lang="ts">
+	import MachineSelect from '$lib/components/MachineSelect.svelte';
+	import SendButton from '$lib/components/SendButton.svelte';
+	import ShowInfo from '$lib/components/ShowInfo.svelte';
+	import type { PageState } from '$lib/typescript/types';
+	import { upload_file } from '$lib/typescript/upload';
 	import FileSelect from '../lib/components/FileSelect.svelte';
 	import StepCounter from '../lib/components/StepCounter.svelte';
 
-	let file: HTMLInputElement;
+	let progress: HTMLProgressElement;
 
-	let list: HTMLUListElement;
+	let page_state: PageState = {
+		step: 1,
+		file: null,
+		target: null
+	};
 
-	// https://developer.mozilla.org/en-US/docs/Web/Media/Formats/Image_types
-	const fileTypes = [
-		'image/apng',
-		'image/bmp',
-		'image/gif',
-		'image/jpeg',
-		'image/pjpeg',
-		'image/png',
-		'image/svg+xml',
-		'image/tiff',
-		'image/webp',
-		'image/x-icon'
-	];
+	let show_progress = false;
+	let error: string | undefined = undefined
 
-	function validFileType(file) {
-		return fileTypes.includes(file.type);
-	}
-
-	function returnFileSize(number) {
-		if (number < 1024) {
-			return `${number} bytes`;
-		} else if (number >= 1024 && number < 1048576) {
-			return `${(number / 1024).toFixed(1)} KB`;
-		} else if (number >= 1048576) {
-			return `${(number / 1048576).toFixed(1)} MB`;
-		}
-	}
-
-	async function handleSubmit(event: SubmitEvent) {
-		const files = file.files;
-
-		if (files === null) {
-			return;
-		}
-
-		for (const file of files) {
-			const listItem = document.createElement('li');
-			const para = document.createElement('p');
-			para.textContent = `File name ${file.name}, file size ${returnFileSize(file.size)}.`;
-
-			fetch(
-				'https://cf-worker.cobular.workers.dev/files?' +
-					new URLSearchParams({
-						target_machine: '3DPrinter'
-					}),
-				{
-					method: 'PUT',
-					body: file
-				}
-			)
-				.then((res) => res.json())
-				.then(console.log)
-				.catch(console.error);
-
-			listItem.appendChild(para);
-
-			list.appendChild(listItem);
-		}
+	function update_progress(cur_progress: number) {
+		show_progress = true;
+		progress.value = cur_progress;
+		console.log(cur_progress);
 	}
 </script>
 
@@ -74,10 +32,80 @@
 			<p class="py-6 pb-10">Upload files below</p>
 
 			<div class="card bg-base-100 shadow-xl m-5">
-				<div class="card-body max-w-sm w-screen">
-					<StepCounter step={1} />
+				<div class="card-body max-w-sm w-screen gap-4">
+					<StepCounter
+						step={page_state.step}
+						on:click_file={() => {
+							page_state = {
+								step: 1,
+								file: null,
+								target: null
+							};
+						}}
+						on:click_target={() => {
+							page_state.step = 2;
+							page_state.target = null;
+						}}
+					/>
 
-					<FileSelect />
+					<ShowInfo data={page_state} />
+
+					{#if page_state.step === 1}
+						<FileSelect
+							on:file_choose={(file) => {
+								page_state.file = file.detail.file;
+								page_state.step = 2;
+							}}
+						/>
+					{:else if page_state.step === 2}
+						<MachineSelect
+							on:select_choose={(select) => {
+								page_state.target = select.detail.machine;
+								page_state.step = 3;
+							}}
+						/>
+					{:else if page_state.step === 3}
+						<SendButton
+							on:send={() => {
+								if (page_state.file === null || page_state.target === null) {
+									throw new Error('File or target is null');
+								}
+								upload_file(page_state.file, page_state.target, update_progress, () => {
+									page_state.step = 4;
+									page_state.file = null;
+									page_state.target = null;
+									error = undefined;
+								}, () => {
+									show_progress = true
+									error = 'Error uploading file'
+								});
+							}}
+						/>
+						{#if show_progress}
+							<progress class="progress progress-primary" class:progress-error={error !== undefined} bind:this={progress} max="100" />
+						{/if}
+					{:else if page_state.step === 4}
+						<p class="text-center text-gray-500">File sent successfully!</p>
+						<button
+							class="btn btn-success"
+							on:click={() => {
+								page_state = {
+									step: 1,
+									file: null,
+									target: null
+								};
+							}}
+							on:keydown={() => {
+								page_state = {
+									step: 1,
+									file: null,
+									target: null
+								};
+							}}
+						>
+						Upload another file?
+						</button>
+					{/if}
 				</div>
 			</div>
 		</div>

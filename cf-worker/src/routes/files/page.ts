@@ -61,7 +61,6 @@ const GET = (async (
   object.writeHttpMetadata(headers);
   headers.set("etag", object.httpEtag);
 
-
   const response = new Response(object.body, { status: 200 });
   response.headers.set("Access-Control-Allow-Origin", "*")
 
