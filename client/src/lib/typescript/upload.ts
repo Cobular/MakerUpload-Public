@@ -25,49 +25,39 @@ export async function upload_file(
 		readable_size: returnFileSize(file.size)
 	};
 
-	const totalBytes = file.size;
-	let bytesUploaded = 0;
-
-  // Cursed shenanigans to persist the file data
-  // const ab = await file.arrayBuffer()
-  // console.log(ab);
-  
-	// const blobReader = (new ReadableStream({
-  //   start(controller) {
-  //     controller.enqueue(ab)
-  //     controller.close()
-  //   }
-  // })).getReader();
-
-	// const progressTrackingStream = new ReadableStream({
-	// 	async pull(controller) {
-	// 		const result = await blobReader.read();
-	// 		if (result.done) {
-	// 			console.log('completed stream');
-	// 			controller.close();
-	// 			return;
-	// 		}
-	// 		controller.enqueue(result.value);
-	// 		bytesUploaded += result.value.byteLength;
-	// 		on_progress(Math.round((bytesUploaded / totalBytes) * 100));
-	// 	}
-	// });
-
-	fetch(
+	const dest_url =
 		BASE_URL +
-			new URLSearchParams({
-				target_machine: '3DPrinter'
-			}),
-		{
-			method: 'PUT',
-			body: file,
-		}
-	)
-		.then((res) => res.text())
-		.then((text) => {
-			console.debug(text);
+		new URLSearchParams({
+			target_machine: '3DPrinter'
+		});
+
+	const totalBytes = file.size;
+
+	new Promise((resolve, reject) => {
+		const xhr = new XMLHttpRequest();
+		xhr.upload.addEventListener('progress', (e) => {
+			on_progress(Math.round((e.loaded / totalBytes) * 100));
+		});
+		xhr.addEventListener('load', () => resolve({ status: xhr.status, body: xhr.responseText }));
+		xhr.addEventListener('error', () => reject(new Error('File upload failed')));
+		xhr.addEventListener('abort', () => reject(new Error('File upload aborted')));
+		xhr.open('PUT', dest_url, true);
+		const formData = new FormData();
+		Array.from([file]).forEach((file, index) => formData.append(index.toString(), file));
+		xhr.send(formData);
+	})
+		.then((value) => {
+			const { status, body } = value as { status: number; body: string };
+			if (status !== 200) {
+				if (on_error) {
+					on_error(`Upload failed with status ${status}`);
+				}
+				console.error('Upload failed with status', status);
+				throw new Error(`Upload failed with status ${status}`);
+			}
+			console.debug(body);
 			if (on_finished) {
-				on_finished(text);
+				on_finished(body);
 			}
 		})
 		.catch((error) => {

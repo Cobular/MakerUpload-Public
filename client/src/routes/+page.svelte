@@ -7,7 +7,6 @@
 	import FileSelect from '../lib/components/FileSelect.svelte';
 	import StepCounter from '../lib/components/StepCounter.svelte';
 
-	let progress: HTMLProgressElement;
 
 	let page_state: PageState = {
 		step: 1,
@@ -18,10 +17,11 @@
 	let show_progress = false;
 	let error: string | undefined = undefined
 
+	let current_progress: number | undefined = undefined;
+
 	function update_progress(cur_progress: number) {
 		show_progress = true;
-		progress.value = cur_progress;
-		console.log(cur_progress);
+		current_progress = cur_progress;
 	}
 </script>
 
@@ -81,8 +81,8 @@
 								});
 							}}
 						/>
-						{#if show_progress}
-							<progress class="progress progress-primary" class:progress-error={error !== undefined} bind:this={progress} max="100" />
+						{#if current_progress !== undefined}
+							<progress class="progress progress-primary" class:progress-error={error !== undefined} value={current_progress} max="100" />
 						{/if}
 					{:else if page_state.step === 4}
 						<p class="text-center text-gray-500">File sent successfully!</p>
