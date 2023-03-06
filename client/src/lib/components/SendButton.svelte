@@ -3,11 +3,16 @@
 
   const dispatch = createEventDispatcher<{ send: {  } }>();
 
+  let enabled = true;
+
   function handle_click() {
-    dispatch('send');
+    if (enabled) {
+      dispatch('send');
+    }
+    enabled = false;
   }
 </script>
 
-<button class="btn btn-primary" on:click={() => dispatch("send")} on:keydown={() => dispatch("send")}>
+<button class="btn btn-primary" disabled={!enabled} on:click={handle_click} on:keydown={handle_click}>
   Upload!
 </button>

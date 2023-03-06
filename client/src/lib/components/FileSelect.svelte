@@ -5,6 +5,8 @@
 
 	let file_input: HTMLInputElement;
 
+	let error: string | undefined = undefined;
+
 	function handle_file_select(event: Event) {
 		const files = file_input.files;
 
@@ -13,6 +15,12 @@
 		}
 
 		for (const file of files) {
+			console.log(file.size)
+			if (file.size > 100000000) {
+				error = "File too large. Please upload a file smaller than ~90MB"
+				return;
+			}
+			error = undefined
 			dispatch('file_choose', {file});
 		}
 	}
@@ -26,4 +34,7 @@
 		type="file"
 		name="file"
 	/>
+	{#if error}
+		<p class="text-red-500">{error}</p>
+	{/if}
 </form>

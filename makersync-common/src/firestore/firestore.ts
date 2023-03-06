@@ -33,14 +33,12 @@ export class FirestoreInterface {
 
     const response = await fetch_res.json();
 
-    console.log(response);
-
     if (!IsFirestoreDocumentList(response.documents)) {
       console.log("Invalid response", response);
       throw new Error("Invalid response");
     }
 
-    return response;
+    return response.documents;
   }
 
   /**
