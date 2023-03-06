@@ -1,4 +1,10 @@
-import { DocumentData, FirestoreDocument, IsFirestoreDocument, IsFirestoreDocumentList, RawDocumentData } from "../types/index";
+import {
+  DocumentData,
+  FirestoreDocument,
+  IsFirestoreDocument,
+  IsFirestoreDocumentList,
+  RawDocumentData,
+} from "../types/index";
 import { getAccessToken } from "./firebase_token";
 
 /**
@@ -78,7 +84,13 @@ export class FirestoreInterface {
    */
   async addDocumentInCollection(
     collection_name: string,
-    { download_url, target_machine, creation_time = new Date(), uid, name }: DocumentData
+    {
+      download_url,
+      target_machine,
+      creation_time = new Date(),
+      uid,
+      name,
+    }: DocumentData
   ) {
     const body: RawDocumentData = {
       creation_time: {
@@ -95,7 +107,7 @@ export class FirestoreInterface {
       },
       name: {
         stringValue: name,
-      }
+      },
     };
 
     const fetch_res = await fetch(
@@ -106,7 +118,7 @@ export class FirestoreInterface {
           Authorization: "Bearer " + this.accessToken,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({fields: body}),
+        body: JSON.stringify({ fields: body }),
       }
     );
 
@@ -123,24 +135,41 @@ export class FirestoreInterface {
   /**
    * Delete a single document in a collection.
    */
-  async deleteDocumentInCollection(collection_name: string, docID: string) {
-    const fetch_res = await fetch(
-      `https://firestore.googleapis.com/v1/projects/${this.projectId}/databases/(default)/documents/${collection_name}/${docID}`,
-      {
+  async deleteDocumentInCollectionRaw(path: string) {
+    const url = `https://firestore.googleapis.com/v1/${path}`;
+
+    console.log("Delete url", url);
+
+    try {
+      const fetch_res = await fetch(url, {
         method: "DELETE",
         headers: {
           Authorization: "Bearer " + this.accessToken,
         },
+      });
+
+      console.log("Delete response", fetch_res);
+
+      if (!fetch_res.ok) {
+        console.error("Invalid response", fetch_res);
+        throw new Error(await fetch_res.text());
       }
-    );
 
-    if (!fetch_res.ok) {
-      console.error("Invalid response", fetch_res);
-      throw new Error(await fetch_res.text());
+      const fetch_json = await fetch_res.json();
+
+      return fetch_json;
+    } catch (e) {
+      console.log("Error deleting document", e);
+      throw e;
     }
+  }
 
-    const fetch_json = await fetch_res.json();
+  /**
+   * Delete a single document in a collection.
+   */
+  async deleteDocumentInCollection(collection_name: string, docID: string) {
+    const url = `https://firestore.googleapis.com/v1/projects/${this.projectId}/databases/(default)/documents/${collection_name}/${docID}`;
 
-    return fetch_json;
+    return this.deleteDocumentInCollectionRaw(url);
   }
 }
