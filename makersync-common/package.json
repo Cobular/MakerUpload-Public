@@ -39,7 +39,8 @@
   },
   "scripts": {
     "build": "rollup -c",
-    "dev": "rollup -c -w"
+    "dev": "rollup -c -w",
+    "preinstall": "npm run build"
   },
   "dependencies": {
     "@sagi.io/workers-jwt": "^0.0.23"

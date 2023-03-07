@@ -9,8 +9,7 @@
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "prettier --plugin-search-dir . --check . && eslint .",
-		"format": "prettier --plugin-search-dir . --write .",
-		"preinstall": "cd ../makersync-common && npm install && npm run build && cd ../client"
+		"format": "prettier --plugin-search-dir . --write ."
 	},
 	"devDependencies": {
 		"makersync-common": "workspace:*",
