@@ -11,6 +11,7 @@ const PUT = (async (
   ctx: ExecutionContext
 ): Promise<Response> => {
   const target_machine = url.searchParams.get("target_machine");
+  const file_name = url.searchParams.get("file_name");
 
   if (!IsTargetMachine(target_machine))
     return new Response("Invalid target_machine", { status: 400 });
@@ -30,7 +31,7 @@ const PUT = (async (
       creation_time: new Date(),
       target_machine: target_machine,
       uid: uuid,
-      name: "Test File.png",
+      name: file_name !== null ? file_name : "no_name",
     });
     const resp = await env.FILE_CACHE_BUCKET.put(uuid, request.body);
 

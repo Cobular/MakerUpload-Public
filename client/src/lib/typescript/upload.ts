@@ -28,7 +28,8 @@ export async function upload_file(
 	const dest_url =
 		BASE_URL +
 		new URLSearchParams({
-			target_machine: '3DPrinter'
+			target_machine: '3DPrinter',
+			file_name: file.name
 		});
 
 	const totalBytes = file.size;

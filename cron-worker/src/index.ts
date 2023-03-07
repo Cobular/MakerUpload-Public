@@ -41,7 +41,7 @@ export default {
 
     const documents = await firestore.getCollection("files");
 
-		console.log("there are " + documents.length + " documents in firebase")
+    console.log("there are " + documents.length + " documents in firebase");
 
     const now = new Date();
 
@@ -50,6 +50,11 @@ export default {
       // 2 minutes ago
       return diff > 1000 * 60 * 2;
     });
+
+    if (docs_to_delete.length === 0) {
+      console.log("No documents to delete");
+      return;
+    }
 
     // Delete all entries in R2
     const document_ids = docs_to_delete.map(
@@ -61,15 +66,19 @@ export default {
 
     // Delete all entries in firebase
     const document_refs = docs_to_delete.map((doc) => doc.name);
-		console.log("Deleting " + document_refs.length + " documents from firebase");
-		
-    document_refs.map(async (ref) => {
-      try {
-        const response = await firestore.deleteDocumentInCollectionRaw(ref);
-				console.log("Deleted " + ref)
-      } catch (e) {
-        console.error(e);
-      }
-    });
+    console.log(
+      "Deleting " + document_refs.length + " documents from firebase"
+    );
+
+    await Promise.all(
+      document_refs.map(async (ref) => {
+        try {
+          const response = await firestore.deleteDocumentInCollectionRaw(ref);
+          console.log("Deleted " + ref);
+        } catch (e) {
+          console.error(e);
+        }
+      })
+    );
   },
 };
