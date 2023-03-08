@@ -11,7 +11,6 @@ export class FirestoreReadable<T extends Record<string, any>> implements Readabl
 		this.subscribe = this.remoteStore.subscribe;
 
 		onSnapshot(this.query, (snapshot) => {
-			console.log('onSnapshot', snapshot);
 			const docs = snapshot.docs;
 			this.change_handlers.forEach((handler) =>
 				snapshot.docChanges().forEach((change) => handler(change))
@@ -25,7 +24,6 @@ export class FirestoreReadable<T extends Record<string, any>> implements Readabl
 		const get_docs_res = await getDocs(query);
 		const docs = get_docs_res.docs;
 		const data = docs.map((doc) => doc.data());
-		console.log('data', data);
 		return new FirestoreReadable<Y>(query, data);
 	}
 

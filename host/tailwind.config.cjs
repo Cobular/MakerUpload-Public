@@ -7,7 +7,13 @@ const config = {
     extend: {}
   },
 
-  plugins: [daisyui]
+  plugins: [daisyui],
+  safelist: [
+    "alert-info",
+    "alert-success",
+    "alert-warning",
+    "alert-error",
+  ]
 };
 
 module.exports = config;

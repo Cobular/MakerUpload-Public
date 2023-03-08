@@ -9,13 +9,22 @@
 	import FilesGrid from '$lib/components/FilesGrid.svelte';
 	import { this_machine_store } from '$lib/stores/this_machine_store';
 	import { download_file } from '$lib/utils';
+	import FloatingQr from '$lib/components/FloatingQR.svelte';
+	import { slide } from 'svelte/transition';
 
 	const files_ref = query<DocumentData>(
 		collection(firestore, '/files') as unknown as CollectionReference<DocumentData>
 	);
 
 	let files_store: Readable<DocumentData[]> = readable([]);
-	
+
+	interface AlertData {
+		message: string;
+		level: 'info' | 'success' | 'warning' | 'error';
+		key: string;
+	}
+
+	let alerts: AlertData[] = [];
 
 	function document_change_handler(snapshot: DocumentChange<DocumentData>) {
 		const doc = snapshot.doc;
@@ -23,7 +32,17 @@
 
 		// If the file type matches this_machine_store, automatically download it
 		if (doc.data().target_machine === $this_machine_store) {
-			console.log('Downloading file');
+			alerts = [
+				...alerts,
+				{
+					message: `Downloading ${doc.data().name}`,
+					level: 'info',
+					key: doc.id
+				}
+			];
+			setTimeout(() => {
+				alerts = alerts.filter((alert) => alert.key !== doc.id);
+			}, 5000);
 			download_file(doc.data().download_url, doc.data().name);
 		}
 	}
@@ -33,10 +52,18 @@
 		files.register_change_handler(document_change_handler);
 		files_store = files;
 	});
-
-	$: console.log($files_store);
-</script>	
+</script>
 
 <Header />
 
-<FilesGrid files={$files_store}/>
+<FilesGrid files={$files_store} />
+
+<div class="toast toast-start">
+	{#each alerts as alert (alert.key)}
+		<div in:slide out:slide class="alert alert-{alert.level}">
+			{alert.message}
+		</div>
+	{/each}
+</div>
+
+<FloatingQr />
