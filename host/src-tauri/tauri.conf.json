@@ -6,7 +6,7 @@
     "distDir": "../build"
   },
   "package": {
-    "productName": "My Tauri App",
+    "productName": "MakerSync",
     "version": "0.1.0"
   },
   "tauri": {
@@ -28,8 +28,8 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "com.tauri.dev",
-      "longDescription": "",
+      "identifier": "com.cobular.makersync",
+      "longDescription": "MakerSync is a tool for very easy and fast file sharing!",
       "macOS": {
         "entitlements": null,
         "exceptionDomain": "",
@@ -55,10 +55,10 @@
     "windows": [
       {
         "fullscreen": false,
-        "height": 600,
+        "height": 900,
         "resizable": true,
-        "title": "Tauri App Window",
-        "width": 800
+        "title": "MakerSync",
+        "width": 1200
       }
     ]
   }

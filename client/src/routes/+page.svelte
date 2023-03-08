@@ -7,16 +7,31 @@
 	import FileSelect from '../lib/components/FileSelect.svelte';
 	import StepCounter from '../lib/components/StepCounter.svelte';
 
-
 	let page_state: PageState = {
 		step: 1,
 		file: null,
 		target: null
 	};
 
-	let error: string | undefined = undefined
-
 	let current_progress: number | undefined = undefined;
+	let send_promise: Promise<unknown> | undefined = undefined;
+	let send_enabled: boolean;
+
+	function send() {
+		if (page_state.file === null || page_state.target === null) {
+			throw new Error('File or target is null');
+		}
+		[, send_promise] = upload_file(page_state.file, page_state.target, update_progress);
+		send_promise.then(() => {
+			page_state.step = 4;
+		});
+		send_promise.catch(() => {
+			setTimeout(() => {
+				send_enabled = true;
+			}, 1000);
+		});
+		current_progress = 0;
+	}
 
 	function update_progress(cur_progress: number) {
 		current_progress = cur_progress;
@@ -29,13 +44,14 @@
 			file: null,
 			target: null
 		};
-		error = undefined;
+		send_promise = undefined;
+		send_enabled = true;
 	}
 </script>
 
-<div class="hero min-h-screen">
+<div class="hero min-h-screen bg-base-300">
 	<div class="hero-content text-center">
-		<div class="max-w-3xl">
+		<div>
 			<h1 class="text-5xl font-bold">MakerSync</h1>
 			<p class="py-6">Send files to the Makerspace!</p>
 
@@ -68,31 +84,23 @@
 							}}
 						/>
 					{:else if page_state.step === 3}
-						<SendButton
-							on:send={() => {
-								if (page_state.file === null || page_state.target === null) {
-									throw new Error('File or target is null');
-								}
-								upload_file(page_state.file, page_state.target, update_progress, () => {
-									reset()
-									page_state.step = 4;
-								}, () => {
-									current_progress = 100;
-									error = 'Error uploading file'
-								});
-							}}
-						/>
-						{#if current_progress !== undefined}
-							<progress class="progress progress-primary" class:progress-error={error !== undefined} value={current_progress} max="100" />
+						<SendButton on:send={send} bind:enabled={send_enabled} />
+						{#if send_promise !== undefined}
+							{#await send_promise}
+								<!-- send_promise is pending -->
+								<progress class="progress progress-primary" value={current_progress} max="100" />
+							{:then value}
+								<!-- send_promise was fulfilled -->
+								<progress class="progress progress-primary" value={100} max="100" />
+							{:catch error}
+								<!-- send_promise was rejected -->
+								<progress class="progress progress-error" value={100} max="100" />
+								<p class="text-center text-red-500">{error.message}</p>
+							{/await}
 						{/if}
 					{:else if page_state.step === 4}
-						<p class="text-center text-gray-500">File sent successfully!</p>
-						<button
-							class="btn btn-success"
-							on:click={reset}
-							on:keydown={reset}
-						>
-						Upload another file?
+						<button class="btn btn-success" on:click={reset} on:keydown={reset}>
+							Upload another file?
 						</button>
 					{/if}
 				</div>
