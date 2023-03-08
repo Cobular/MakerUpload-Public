@@ -16,9 +16,8 @@
 		"tauri:build": "cargo tauri build"
 	},
 	"devDependencies": {
-		"makersync-common": "workspace:*",
 		"@sveltejs/adapter-auto": "^2.0.0",
-		"@sveltejs/adapter-static": "next",
+		"@sveltejs/adapter-static": "1.0.0-next.50",
 		"@sveltejs/kit": "^1.5.0",
 		"@tauri-apps/api": "^1.0.2",
 		"@typescript-eslint/eslint-plugin": "^5.45.0",
@@ -28,6 +27,7 @@
 		"eslint": "^8.28.0",
 		"eslint-config-prettier": "^8.5.0",
 		"eslint-plugin-svelte3": "^4.0.0",
+		"makersync-common": "workspace:*",
 		"npm-run-all": "^4.1.5",
 		"postcss": "^8.4.14",
 		"postcss-load-config": "^4.0.1",
@@ -44,5 +44,5 @@
 	"type": "module",
 	"dependencies": {
 		"firebase": "^9.17.1"
-		}
+	}
 }
