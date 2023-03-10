@@ -13,7 +13,7 @@ const PUT = (async (
   const target_machine = url.searchParams.get("target_machine");
   const file_name = url.searchParams.get("file_name");
   const token = url.searchParams.get("token");
- const ip = request.headers.get('CF-Connecting-IP');
+  const ip = request.headers.get("CF-Connecting-IP");
 
   // Validations
   if (!IsTargetMachine(target_machine))
@@ -25,25 +25,22 @@ const PUT = (async (
   // "/siteverify" API endpoint.
   if (token === null) return new Response("No token", { status: 400 });
   let formData = new FormData();
-  formData.append('secret', env.TURNSTILE_KEY);
-  formData.append('response', token);  
-  if (ip !== null)
-    formData.append('remoteip', ip);
+  formData.append("secret", env.TURNSTILE_KEY);
+  formData.append("response", token);
+  if (ip !== null) formData.append("remoteip", ip);
 
-  const turnstile_key = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
-  const result = await fetch(url, {
-    body: formData,
-    method: 'POST',
-  });
-
-  console.log(await result.text());
-  
+  const result = await fetch(
+    "https://challenges.cloudflare.com/turnstile/v0/siteverify",
+    {
+      body: formData,
+      method: "POST",
+    }
+  );
 
   const outcome = await result.json();
-  console.log(outcome);
-  
+
   if (outcome.success !== true) {
-    return new Response(`Captcha failed`, { status: 400 });
+    return new Response(`Captcha failed` + JSON.stringify(outcome), { status: 400 });
   }
 
   // Do da upload
@@ -65,7 +62,7 @@ const PUT = (async (
     const resp = await env.FILE_CACHE_BUCKET.put(uuid, request.body);
 
     const response = new Response(`Upload success`, { status: 200 });
-    response.headers.set("Access-Control-Allow-Origin", "*")
+    response.headers.set("Access-Control-Allow-Origin", "*");
 
     return response;
   } catch (e) {
@@ -92,7 +89,7 @@ const GET = (async (
   headers.set("etag", object.httpEtag);
 
   const response = new Response(object.body, { status: 200 });
-  response.headers.set("Access-Control-Allow-Origin", "*")
+  response.headers.set("Access-Control-Allow-Origin", "*");
 
   return response;
 }) satisfies RouteHandler;
@@ -123,7 +120,10 @@ const OPTIONS = (async (
   const response = new Response(null);
 
   response.headers.set("Access-Control-Allow-Origin", "*");
-  response.headers.set("Access-Control-Allow-Methods", "GET,PUT,DELETE,OPTIONS");
+  response.headers.set(
+    "Access-Control-Allow-Methods",
+    "GET,PUT,DELETE,OPTIONS"
+  );
   response.headers.set("Access-Control-Max-Age", "86400");
 
   const requestHeaders = request.headers.get("Access-Control-Request-Headers");
@@ -132,7 +132,7 @@ const OPTIONS = (async (
     response.headers.set("Access-Control-Allow-Headers", requestHeaders);
   }
 
-  return response
+  return response;
 }) satisfies RouteHandler;
 
 export const Files = (async (
