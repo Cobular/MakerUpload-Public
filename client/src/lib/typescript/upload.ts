@@ -16,6 +16,7 @@ export type OnError = (result: string) => void;
 export function upload_file(
 	file: File,
 	target_machine: TargetMachine,
+	token: string,
 	on_progress: OnProgress
 ): [FileData, Promise<unknown>] {
 	const file_data: FileData = {
@@ -28,7 +29,8 @@ export function upload_file(
 		BASE_URL +
 		new URLSearchParams({
 			target_machine: target_machine,
-			file_name: file.name
+			file_name: file.name,
+			token: token
 		});
 
 	const totalBytes = file.size;

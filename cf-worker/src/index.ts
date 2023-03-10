@@ -16,6 +16,7 @@ export interface Env {
 
   FIREBASE_PROJECT_ID: string;
   FIREBASE_SERVICE_ACCT_JSON: string;
+  TURNSTILE_KEY: string;
 }
 
 export default {

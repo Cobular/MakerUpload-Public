@@ -1,1 +1,2 @@
 FIREBASE_SERVICE_ACCT_JSON='Firebase service acct json in one line'
+TURNSTILE_KEY='key'

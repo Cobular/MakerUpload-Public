@@ -4,6 +4,7 @@
 	import ShowInfo from '$lib/components/ShowInfo.svelte';
 	import type { PageState } from '$lib/typescript/types';
 	import { upload_file } from '$lib/typescript/upload';
+	import { onMount } from 'svelte';
 	import FileSelect from '../lib/components/FileSelect.svelte';
 	import StepCounter from '../lib/components/StepCounter.svelte';
 
@@ -13,15 +14,16 @@
 		target: null
 	};
 
+	let turnstile_element: HTMLDivElement;
 	let current_progress: number | undefined = undefined;
 	let send_promise: Promise<unknown> | undefined = undefined;
 	let send_enabled: boolean;
 
-	function send() {
+	async function upload(token: string) {
 		if (page_state.file === null || page_state.target === null) {
 			throw new Error('File or target is null');
 		}
-		[, send_promise] = upload_file(page_state.file, page_state.target, update_progress);
+		[, send_promise] = upload_file(page_state.file, page_state.target, token, update_progress);
 		send_promise.then(() => {
 			page_state.step = 4;
 		});
@@ -31,6 +33,18 @@
 			}, 1000);
 		});
 		current_progress = 0;
+	}
+
+	async function send() {
+		// First, we need to talk to cloudflare
+		const res = window.turnstile.render(turnstile_element, {
+			sitekey: '0x4AAAAAAADGNjylRVrnMnPc',
+			callback: function (token: string) {
+				console.log(`Challenge Success ${token}`);
+				upload(token);
+			}
+		});
+		console.log(res);
 	}
 
 	function update_progress(cur_progress: number) {
@@ -54,7 +68,6 @@
 		<div>
 			<h1 class="text-5xl font-bold">MakerSync</h1>
 			<p class="py-6">Send files to the Makerspace!</p>
-
 			<div class="card bg-base-100 shadow-xl m-5">
 				<div class="card-body max-w-sm w-screen gap-4">
 					<StepCounter
@@ -85,6 +98,7 @@
 						/>
 					{:else if page_state.step === 3}
 						<SendButton on:send={send} bind:enabled={send_enabled} />
+						<div bind:this={turnstile_element} />
 						{#if send_promise !== undefined}
 							{#await send_promise}
 								<!-- send_promise is pending -->

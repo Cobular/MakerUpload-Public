@@ -12,12 +12,41 @@ const PUT = (async (
 ): Promise<Response> => {
   const target_machine = url.searchParams.get("target_machine");
   const file_name = url.searchParams.get("file_name");
+  const token = url.searchParams.get("token");
+ const ip = request.headers.get('CF-Connecting-IP');
 
+  // Validations
   if (!IsTargetMachine(target_machine))
     return new Response("Invalid target_machine", { status: 400 });
 
   if (request.body === null) return new Response("No body", { status: 400 });
 
+  // Turnstile validation
+  // "/siteverify" API endpoint.
+  if (token === null) return new Response("No token", { status: 400 });
+  let formData = new FormData();
+  formData.append('secret', env.TURNSTILE_KEY);
+  formData.append('response', token);  
+  if (ip !== null)
+    formData.append('remoteip', ip);
+
+  const turnstile_key = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
+  const result = await fetch(url, {
+    body: formData,
+    method: 'POST',
+  });
+
+  console.log(await result.text());
+  
+
+  const outcome = await result.json();
+  console.log(outcome);
+  
+  if (outcome.success !== true) {
+    return new Response(`Captcha failed`, { status: 400 });
+  }
+
+  // Do da upload
   const firestore = await FirestoreInterface.New(
     env.FIREBASE_PROJECT_ID,
     env.FIREBASE_SERVICE_ACCT_JSON
