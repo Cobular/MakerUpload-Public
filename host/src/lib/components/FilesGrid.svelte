@@ -6,7 +6,7 @@
 </script>
 
 <div class="grid grid-cols-[repeat(auto-fill,_minmax(300px,_1fr))] gap-3 p-3">
-  {#each files as file}
+  {#each files.reverse() as file}
      <File {file} />
   {/each}
 </div>

@@ -29,7 +29,10 @@
 	let alerts: AlertData[] = [];
 
 	function document_change_handler(snapshot: DocumentChange<DocumentData>) {
+		if (snapshot.type !== 'added') return;
+		
 		const doc = snapshot.doc;
+
 		console.log(`${doc.data().name}|${doc.data().download_url}`);
 
 		// If the file type matches this_machine_store, automatically download it
