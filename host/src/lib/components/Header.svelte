@@ -4,8 +4,8 @@
 	import { getVersion } from '@tauri-apps/api/app';
 </script>
 
-<div class="p-3 w-screen">
-	<div class="navbar bg-base-200 rounded-2xl">
+<div data-tauri-drag-region class="p-3 w-screen">
+	<div data-tauri-drag-region class="navbar bg-base-200 rounded-2xl cursor-grab">
 			<a class="btn btn-ghost normal-case text-xl font-mono" href="/">upload.cobular.com</a>
 			{#await getVersion()}
 				<!-- promise is pending -->

@@ -7,11 +7,14 @@
   },
   "package": {
     "productName": "MakerSync",
-    "version": "0.1.2"
+    "version": "0.2.0"
   },
   "tauri": {
     "allowlist": {
-      "all": false
+      "all": false,
+      "window": {
+        "startDragging": true
+      }
     },
     "bundle": {
       "active": true,
@@ -43,7 +46,10 @@
       "windows": {
         "certificateThumbprint": null,
         "digestAlgorithm": "sha256",
-        "timestampUrl": ""
+        "timestampUrl": "",
+        "wix": {
+          "template": "./fragments/no_admin_fragment.wxs"
+        }
       }
     },
     "security": {
@@ -58,7 +64,8 @@
         "height": 900,
         "resizable": true,
         "title": "MakerSync",
-        "width": 1200
+        "width": 1200,
+        "decorations": false
       }
     ]
   }
