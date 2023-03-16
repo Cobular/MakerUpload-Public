@@ -46,13 +46,15 @@ async function getAccessToken(auth_json) {
 }
 
 class FirestoreInterface {
-  constructor(accessToken, projectId) {
+  constructor(accessToken, projectId, log_func, error_func) {
     this.accessToken = accessToken;
     this.projectId = projectId;
+    this.log_func = log_func;
+    this.error_func = error_func;
   }
-  static async New(projectId, auth_json) {
+  static async New(projectId, auth_json, log_func = console.log, error_func = console.error) {
     const accessToken = await getAccessToken(auth_json);
-    return new FirestoreInterface(accessToken.access_token, projectId);
+    return new FirestoreInterface(accessToken.access_token, projectId, log_func, error_func);
   }
   async getCollection(collection_name) {
     const fetch_res = await fetch(
@@ -65,7 +67,7 @@ class FirestoreInterface {
       }
     );
     if (!fetch_res.ok) {
-      console.error("Invalid response", fetch_res);
+      this.error_func(`Invalid response ${fetch_res}`);
       throw new Error("Invalid response");
     }
     const response = await fetch_res.json();
@@ -73,7 +75,7 @@ class FirestoreInterface {
       return [];
     }
     if (!IsFirestoreDocumentList(response.documents)) {
-      console.log("Invalid response", response);
+      this.error_func(`Invalid response ${response}`);
       throw new Error("Invalid response");
     }
     return response.documents;
@@ -92,12 +94,12 @@ class FirestoreInterface {
       }
     );
     if (!fetch_res.ok) {
-      console.error("Invalid response", fetch_res);
+      this.error_func(`Invalid response ${fetch_res}`);
       throw new Error("Invalid response");
     }
     const response = await fetch_res.json();
     if (!IsFirestoreDocument(response)) {
-      console.log("Invalid response", response);
+      this.error_func(`Invalid response ${response}`);
       throw new Error("Invalid response");
     }
     return response;
@@ -141,7 +143,7 @@ class FirestoreInterface {
       }
     );
     if (!fetch_res.ok) {
-      console.error("Invalid response", fetch_res);
+      this.error_func(`Invalid response ${fetch_res}`);
       throw new Error(await fetch_res.text());
     }
     const fetch_json = await fetch_res.json();
@@ -152,7 +154,7 @@ class FirestoreInterface {
    */
   async deleteDocumentInCollectionRaw(path) {
     const url = `https://firestore.googleapis.com/v1/${path}`;
-    console.log("Delete url", url);
+    this.log_func(`Delete url: ${url}`);
     try {
       const fetch_res = await fetch(url, {
         method: "DELETE",
@@ -160,15 +162,15 @@ class FirestoreInterface {
           Authorization: "Bearer " + this.accessToken
         }
       });
-      console.log("Delete response", fetch_res);
+      this.log_func(`Delete response ${fetch_res}`);
       if (!fetch_res.ok) {
-        console.error("Invalid response", fetch_res);
+        this.error_func(`Invalid response ${fetch_res}`);
         throw new Error(await fetch_res.text());
       }
       const fetch_json = await fetch_res.json();
       return fetch_json;
     } catch (e) {
-      console.log("Error deleting document", e);
+      this.log_func(`Error deleting document ${e}`);
       throw e;
     }
   }

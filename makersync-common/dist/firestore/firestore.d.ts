@@ -38,8 +38,10 @@ type TargetMachine = (typeof target_machines)[number];
 declare class FirestoreInterface {
     private accessToken;
     private projectId;
-    constructor(accessToken: string, projectId: string);
-    static New<T>(projectId: string, auth_json: string): Promise<FirestoreInterface>;
+    private log_func;
+    private error_func;
+    constructor(accessToken: string, projectId: string, log_func: (msg: string) => void, error_func: (msg: string) => void);
+    static New<T>(projectId: string, auth_json: string, log_func?: (msg: string) => void, error_func?: (msg: string) => void): Promise<FirestoreInterface>;
     getCollection(collection_name: string): Promise<FirestoreDocument[]>;
     /**
      * Get a single document in a collection.
