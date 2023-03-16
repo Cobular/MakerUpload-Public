@@ -12,7 +12,8 @@
 	import FloatingQr from '$lib/components/FloatingQR.svelte';
 	import { slide } from 'svelte/transition';
 	import { prevent_close } from '$lib/prevent_close';
-	import Titlebar from '$lib/components/Titlebar.svelte';
+
+	import { trace, info, error, attachConsole } from "tauri-plugin-log-api";
 
 	const files_ref = query<DocumentData>(
 		collection(firestore, '/files') as unknown as CollectionReference<DocumentData>
@@ -33,7 +34,7 @@
 		
 		const doc = snapshot.doc;
 
-		console.log(`${doc.data().name}|${doc.data().download_url}`);
+		info(`${doc.data().name}|${doc.data().download_url}`);
 
 		// If the file type matches this_machine_store, automatically download it
 		if (doc.data().target_machine === $this_machine_store) {
@@ -53,10 +54,14 @@
 	}
 
 	onMount(async () => {
+		// with LogTarget::Webview enabled this function will print logs to the browser console
+		const detach = await attachConsole();
 		prevent_close();
 		const files = await FirestoreReadable.new<DocumentData>(files_ref);
 		files.register_change_handler(document_change_handler);
 		files_store = files;
+
+		return detach;
 	});
 </script>
 
