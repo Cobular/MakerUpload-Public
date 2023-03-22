@@ -10,6 +10,7 @@
 	import FloatingQr from '$lib/components/FloatingQR.svelte';
 	import { slide } from 'svelte/transition';
 	import { prevent_close } from '$lib/prevent_close';
+	import { emit } from '@tauri-apps/api/event';
 
 	import { trace, info, error, attachConsole } from 'tauri-plugin-log-api';
 	import Main from '$lib/components/Main.svelte';
@@ -56,7 +57,6 @@
 		files_store = files;
 
 		// Once every 4 hours, check for an update
-		import { emit } from '@tauri-apps/api/event';
 		const update_interval = setInterval(async function() {
 			await emit("tauri://update");
 		}, 4 * 60 * 60 * 1000); // 4 hours in milliseconds
