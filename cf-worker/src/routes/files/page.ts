@@ -52,6 +52,7 @@ const PUT = (async (
   const uuid = uuidv4();
   console.log("UUID", uuid);
   try {
+    const resp = await env.FILE_CACHE_BUCKET.put(uuid, request.body);
     const firestore_resp = await firestore.addDocumentInCollection("files", {
       download_url: `https://cf-worker.cobular.workers.dev/files?uuid=${uuid}`,
       creation_time: new Date(),
@@ -59,7 +60,6 @@ const PUT = (async (
       uid: uuid,
       name: file_name !== null ? file_name : "no_name",
     });
-    const resp = await env.FILE_CACHE_BUCKET.put(uuid, request.body);
 
     const response = new Response(`Upload success`, { status: 200 });
     response.headers.set("Access-Control-Allow-Origin", "*");

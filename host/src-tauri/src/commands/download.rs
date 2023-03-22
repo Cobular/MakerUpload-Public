@@ -19,6 +19,11 @@ pub async fn download_file(url: String, filename: String) -> Result<u64, String>
         resp.content_length()
     );
 
+    if (resp.status() != reqwest::StatusCode::OK) {
+        error!("Download failed: {}", resp.status());
+        return Err(format!("Download failed: {}", resp.status()));
+    }
+
     let mut content = Cursor::new(resp.bytes().await.map_err(|e| e.to_string())?);
 
     let len = copy(&mut content, &mut out)
