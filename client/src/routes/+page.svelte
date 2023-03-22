@@ -67,7 +67,7 @@
 	<div class="hero-content text-center">
 		<div>
 			<h1 class="text-5xl font-bold">MakerSync</h1>
-			<p class="py-6">Send files to the Makerspace!</p>
+			<p class="py-6">Send files to makerspace computers!</p>
 			<div class="card bg-base-100 shadow-xl m-5">
 				<div class="card-body max-w-sm w-screen gap-4">
 					<StepCounter
