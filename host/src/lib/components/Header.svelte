@@ -3,10 +3,10 @@
 	import { target_machines } from 'makersync-common/types';
 	import { getVersion } from '@tauri-apps/api/app';
 	import { open } from '@tauri-apps/api/shell';
-	import { documentDir } from '@tauri-apps/api/path';
+	import { downloadDir } from '@tauri-apps/api/path';
 </script>
 
-<div data-tauri-drag-region class="p-3 w-screen">
+<div data-tauri-drag-region class="p-4 w-screen pb-0">
 	<div data-tauri-drag-region class="navbar bg-base-200 rounded-2xl cursor-grab">
 			<a class="btn btn-ghost normal-case text-xl font-mono" href="/">upload.cobular.com</a>
 			{#await getVersion()}
@@ -15,7 +15,7 @@
 				<p class="text-gray-400">v{version}</p>
 			{/await}
 			<div class="ml-auto">
-				<button class="btn mr-4" on:click={async () => open(await documentDir())}>
+				<button class="btn mr-4" on:click={async () => open(await downloadDir())}>
 					Open Folder
 				</button>
 				<label class="input-group">

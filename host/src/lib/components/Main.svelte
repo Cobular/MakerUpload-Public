@@ -8,8 +8,14 @@
 
 <div class="w-screen h-screen flex flex-col">
   <Header />
-  <div class="overflow-y-scroll overflow-x-clip">
+  {#if files.length > 0}
+  <div class="overflow-y-scroll overflow-x-clip h-full">
     <FilesGrid {files} />
   </div>
+  {:else}
+  <div class="flex-grow flex justify-center items-center">
+      <p class="text-5xl font-mono">No files, upload something!</p>
+  </div>
+  {/if}
 </div>
 

@@ -17,7 +17,9 @@
 
 	// Setup a usetimeout to update the minutes ago every 30 seconds
 	const timeout = setInterval(() => {
-		minutes_ago = Math.floor((new Date().getTime() - js_date.getTime()) / 1000 / 60);
+		const tiem = (new Date().getTime() - js_date.getTime()) / 1000 / 60
+		minutes_ago = Math.floor(tiem);
+		console.log(minutes_ago);
 	}, 3000);
 
 

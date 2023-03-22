@@ -9,7 +9,7 @@
   }
 </script>
 
-<div class="grid grid-cols-[repeat(auto-fill,_minmax(300px,_1fr))] gap-3 p-3">
+<div class="grid grid-cols-[repeat(auto-fill,_minmax(300px,_1fr))] gap-3 p-4">
   {#each files.sort(sorting).reverse() as file}
      <File {file} />
   {/each}
