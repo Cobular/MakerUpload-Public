@@ -82,6 +82,7 @@ async function handler(
 const headers = {
   Authorization:
     "DSN https://bac4d51d022046fb8e5411656a8fbbc3@o4504879295627264.ingest.sentry.io/4504879441969152",
+  'Content-Type': 'application/json; charset=UTF-8',
 };
 const monitor_id = "526026b2-88c3-45fa-9726-bba84b061761"; // Write your monitor_id here
 const org_slug = "ucla-makerspace"; // Write your organization slug here
@@ -111,6 +112,7 @@ export default {
         }
       );
       if (!create_checkin_response.ok) {
+        console.error(await create_checkin_response.text());
         throw new Error(
           `HTTP error! Status: ${create_checkin_response.status}`
         );

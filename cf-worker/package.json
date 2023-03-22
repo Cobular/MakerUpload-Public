@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20230228.0",
+    "@sentry/cli": "^2.15.2",
     "typescript": "^4.9.3",
     "vitest": "^0.29.2",
     "wrangler": "2.12.0"
@@ -10,8 +11,8 @@
   "private": true,
   "scripts": {
     "start": "wrangler dev",
-    "deploy": "wrangler publish",
-    "test": "vitest"
+    "deploy": "wrangler publish && pnpm create-sentry-release",
+    "create-sentry-release": "pnpm sentry-cli releases new \"1.0.1\" --finalize && pnpm sentry-cli releases files \"1.0.1\" upload-sourcemaps ./dist"
   },
   "dependencies": {
     "@types/uuid": "^9.0.1",
