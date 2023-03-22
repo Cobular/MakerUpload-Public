@@ -43,6 +43,8 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@sentry/svelte": "^7.44.2",
+		"@sentry/tracing": "^7.44.2",
 		"firebase": "^9.17.1",
 		"tauri-plugin-log-api": "github:tauri-apps/tauri-plugin-log"
 	}
