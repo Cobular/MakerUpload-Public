@@ -1,0 +1,3 @@
+[submodule "tauri-update-cloudflare"]
+	path = tauri-update-cloudflare
+	url = git@github.com:Cobular/tauri-update-cloudflare.git

@@ -5,3 +5,4 @@ packages:
   - 'cf-worker'
   - 'cron-worker'
   - 'makersync-common'
+  - 'tauri-update-cloudflare'

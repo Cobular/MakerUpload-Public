@@ -55,7 +55,16 @@
 		files.register_change_handler(document_change_handler);
 		files_store = files;
 
-		return detach;
+		// Once every 4 hours, check for an update
+		import { emit } from '@tauri-apps/api/event';
+		const update_interval = setInterval(async function() {
+			await emit("tauri://update");
+		}, 4 * 60 * 60 * 1000); // 4 hours in milliseconds
+
+		return () => {
+			detach();
+			clearInterval(update_interval);
+		};
 	});
 </script>
 
