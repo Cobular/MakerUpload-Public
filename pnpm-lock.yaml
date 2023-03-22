@@ -7,6 +7,7 @@ importers:
       '@cloudflare/workers-types': ^4.20230228.0
       '@types/uuid': ^9.0.1
       makersync-common: workspace:*
+      toucan-js: ^3.1.0
       typescript: ^4.9.3
       uuid: ^9.0.0
       vitest: ^0.29.2
@@ -14,6 +15,7 @@ importers:
     dependencies:
       '@types/uuid': 9.0.1
       makersync-common: link:../makersync-common
+      toucan-js: 3.1.0
       uuid: 9.0.0
     devDependencies:
       '@cloudflare/workers-types': 4.20230228.0
@@ -88,11 +90,13 @@ importers:
     specifiers:
       '@cloudflare/workers-types': ^4.20230228.0
       makersync-common: workspace:*
+      toucan-js: ^3.1.0
       typescript: ^4.9.3
       vitest: ^0.29.2
       wrangler: ^2.12.0
     dependencies:
       makersync-common: link:../makersync-common
+      toucan-js: 3.1.0
     devDependencies:
       '@cloudflare/workers-types': 4.20230228.0
       typescript: 4.9.5
@@ -1683,6 +1687,15 @@ packages:
       - supports-color
     dev: false
 
+  /@sentry/core/7.28.1:
+    resolution: {integrity: sha512-7wvnuvn/mrAfcugWoCG/3pqDIrUgH5t+HisMJMGw0h9Tc33KqrmqMDCQVvjlrr2pWrw/vuUCFdm8CbUHJ832oQ==}
+    engines: {node: '>=8'}
+    dependencies:
+      '@sentry/types': 7.28.1
+      '@sentry/utils': 7.28.1
+      tslib: 1.14.1
+    dev: false
+
   /@sentry/core/7.44.2:
     resolution: {integrity: sha512-m2nOHP4YX+kmWFQTzgBEsdblCuNFSB7017oLaR6/VH0a0mVWdrW7Q1gHMpw4/08uWRiA+oC2dXqCH7A1FwfGIQ==}
     engines: {node: '>=8'}
@@ -1737,9 +1750,22 @@ packages:
       '@sentry-internal/tracing': 7.44.2
     dev: false
 
+  /@sentry/types/7.28.1:
+    resolution: {integrity: sha512-DvSplMVrVEmOzR2M161V5+B8Up3vR71xMqJOpWTzE9TqtFJRGPtqT/5OBsNJJw1+/j2ssMcnKwbEo9Q2EGeS6g==}
+    engines: {node: '>=8'}
+    dev: false
+
   /@sentry/types/7.44.2:
     resolution: {integrity: sha512-vdGb2BAelXRitgKWRBF1cCAoisLsbugUaJzrGCQoIoS3lYpZ8d8r2zELE7cNoVObVoQbUHF/WFhXVv8cumj+RA==}
     engines: {node: '>=8'}
+    dev: false
+
+  /@sentry/utils/7.28.1:
+    resolution: {integrity: sha512-75/jzLUO9HH09iC9TslNimGbxOP3jgn89P+q7uR+rp2fJfRExHVeKJZQdK0Ij4/SmE7TJ3Uh2r154N0INZEx1g==}
+    engines: {node: '>=8'}
+    dependencies:
+      '@sentry/types': 7.28.1
+      tslib: 1.14.1
     dev: false
 
   /@sentry/utils/7.44.2:
@@ -4852,6 +4878,14 @@ packages:
     resolution: {integrity: sha512-eM+pCBxXO/njtF7vdFsHuqb+ElbxqtI4r5EAvk6grfAFyJ6IvWlSkfZ5T9ozC6xWw3Fj1fGoSmrl0gUs46JVIw==}
     engines: {node: '>=6'}
     dev: true
+
+  /toucan-js/3.1.0:
+    resolution: {integrity: sha512-bRbq/HB+aSfwbsSoCNI6qyPXx2bhsscxSYxnAY63xXv9lIeOLUYfvYdOIBWfAVj9QHNST+X83GQ0lj/llvHpVg==}
+    dependencies:
+      '@sentry/core': 7.28.1
+      '@sentry/types': 7.28.1
+      '@sentry/utils': 7.28.1
+    dev: false
 
   /tr46/0.0.3:
     resolution: {integrity: sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw==}

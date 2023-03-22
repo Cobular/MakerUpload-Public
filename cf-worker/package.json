@@ -14,8 +14,9 @@
     "test": "vitest"
   },
   "dependencies": {
-    "makersync-common": "workspace:*",
     "@types/uuid": "^9.0.1",
+    "makersync-common": "workspace:*",
+    "toucan-js": "^3.1.0",
     "uuid": "^9.0.0"
   }
 }
