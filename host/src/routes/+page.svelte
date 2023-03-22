@@ -5,15 +5,15 @@
 	import { onMount } from 'svelte';
 	import { firestore } from '../lib/firebase';
 	import type { DocumentData } from 'makersync-common/types';
-	import Header from '$lib/components/Header.svelte';
-	import FilesGrid from '$lib/components/FilesGrid.svelte';
 	import { this_machine_store } from '$lib/stores/this_machine_store';
 	import { download_file } from '$lib/utils';
 	import FloatingQr from '$lib/components/FloatingQR.svelte';
 	import { slide } from 'svelte/transition';
 	import { prevent_close } from '$lib/prevent_close';
 
-	import { trace, info, error, attachConsole } from "tauri-plugin-log-api";
+	import { trace, info, error, attachConsole } from 'tauri-plugin-log-api';
+	import Main from '$lib/components/Main.svelte';
+	import type { AlertData } from '$lib/types';
 
 	const files_ref = query<DocumentData>(
 		collection(firestore, '/files') as unknown as CollectionReference<DocumentData>
@@ -21,17 +21,11 @@
 
 	let files_store: Readable<DocumentData[]> = readable([]);
 
-	interface AlertData {
-		message: string;
-		level: 'info' | 'success' | 'warning' | 'error';
-		key: string;
-	}
-
 	let alerts: AlertData[] = [];
 
 	function document_change_handler(snapshot: DocumentChange<DocumentData>) {
 		if (snapshot.type !== 'added') return;
-		
+
 		const doc = snapshot.doc;
 
 		info(`${doc.data().name}|${doc.data().download_url}`);
@@ -65,9 +59,8 @@
 	});
 </script>
 
-<Header />
-
-<FilesGrid files={$files_store} />
+<Main files={$files_store} />
+<FloatingQr />
 
 <div class="toast toast-start">
 	{#each alerts as alert (alert.key)}
@@ -76,5 +69,3 @@
 		</div>
 	{/each}
 </div>
-
-<FloatingQr />

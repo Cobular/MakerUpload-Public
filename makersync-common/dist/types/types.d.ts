@@ -1,5 +1,9 @@
+interface DateGen {
+    toDate: () => Date;
+}
+
 interface DocumentData {
-    creation_time: Date;
+    creation_time: DateGen;
     download_url: string;
     target_machine: TargetMachine;
     name: string;

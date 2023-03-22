@@ -20,6 +20,7 @@ it('set and update prop', async () => {
 
 	// Update prop using Svelte's Client-side component API
   const file2: DocumentData = {
+    // @ts-ignore
 		creation_time: weird_js_object,
 		download_url: 'https://cf-worker.cobular.workers.dev/files?uuid=1234',
 		target_machine: 'Sewing',
