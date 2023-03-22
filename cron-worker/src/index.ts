@@ -118,7 +118,7 @@ export default {
         );
       }
 
-      handler(controller, env, ctx);
+      await handler(controller, env, ctx);
 
       var endDate = new Date();
       const update_data = {

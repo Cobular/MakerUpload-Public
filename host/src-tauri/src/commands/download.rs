@@ -19,7 +19,7 @@ pub async fn download_file(url: String, filename: String) -> Result<u64, String>
         resp.content_length()
     );
 
-    if (resp.status() != reqwest::StatusCode::OK) {
+    if resp.status() != reqwest::StatusCode::OK {
         error!("Download failed: {}", resp.status());
         return Err(format!("Download failed: {}", resp.status()));
     }

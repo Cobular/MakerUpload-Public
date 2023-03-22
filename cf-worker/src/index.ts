@@ -53,7 +53,7 @@ export default {
     });
 
     try {
-      return handler(request, env, ctx);
+      return await handler(request, env, ctx);
     } catch (e) {
       sentry.captureException(e);
 
