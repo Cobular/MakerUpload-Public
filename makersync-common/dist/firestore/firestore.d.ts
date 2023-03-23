@@ -29,7 +29,7 @@ interface FirestoreDocument {
     updateTime?: string;
 }
 
-declare const target_machines: readonly ["3DPrinter", "Sewing"];
+declare const target_machines: readonly ["3DPrinter", "Sewing", "MachineShop"];
 type TargetMachine = (typeof target_machines)[number];
 
 /**

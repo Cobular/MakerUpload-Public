@@ -1,9 +1,5 @@
-interface DateGen {
-    toDate: () => Date;
-}
-
 interface DocumentData {
-    creation_time: DateGen;
+    creation_time: Date;
     download_url: string;
     target_machine: TargetMachine;
     name: string;
@@ -37,7 +33,7 @@ declare function IsRawDocument(value: unknown): value is RawDocumentData;
 declare function IsFirestoreDocument(value: unknown): value is FirestoreDocument;
 declare function IsFirestoreDocumentList(value: unknown): value is FirestoreDocument[];
 
-declare const target_machines: readonly ["3DPrinter", "Sewing"];
+declare const target_machines: readonly ["3DPrinter", "Sewing", "MachineShop"];
 type TargetMachine = (typeof target_machines)[number];
 declare function IsTargetMachine(value: unknown): value is TargetMachine;
 
