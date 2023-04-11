@@ -92,6 +92,16 @@
 		send_promise = undefined;
 		send_enabled = true;
 	}
+
+	function file_choose(file: File) {
+		page_state.file = file;
+		umami_event('file_choose', {
+			type: 'file_choose',
+			filename: page_state.file.name,
+			size: page_state.file.size.toString()
+		});
+		page_state.step = 2;
+	}
 </script>
 
 <div class="hero min-h-screen bg-base-300">

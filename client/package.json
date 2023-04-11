@@ -21,6 +21,7 @@
 		"eslint": "^8.28.0",
 		"eslint-config-prettier": "^8.5.0",
 		"eslint-plugin-svelte3": "^4.0.0",
+		"filedrop-svelte": "^0.1.2",
 		"makersync-common": "workspace:*",
 		"postcss": "^8.4.14",
 		"postcss-load-config": "^4.0.1",
