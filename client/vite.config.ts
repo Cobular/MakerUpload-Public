@@ -2,6 +2,8 @@ import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vite';
 import { sentryVitePlugin } from '@sentry/vite-plugin';
 
+const prod = process.env.VERCEL_ENV === "PRODUCTION";
+
 export default defineConfig({
 	build: {
 		sourcemap: true
@@ -9,7 +11,7 @@ export default defineConfig({
 	plugins: [
 		sveltekit(),
 		// Put the Sentry vite plugin after all other plugins
-		sentryVitePlugin({
+		prod && sentryVitePlugin({
 			org: 'ucla-makerspace',
 			project: 'user-client',
 
