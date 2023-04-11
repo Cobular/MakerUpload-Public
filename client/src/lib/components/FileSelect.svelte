@@ -39,6 +39,7 @@
 		handle_file_select(accepted_files);
 	}}
 >
+	<p>Drag a file here, or select one below!</p>
 	<input
 		class="file-input file-input-info w-80"
 		bind:this={file_input}
