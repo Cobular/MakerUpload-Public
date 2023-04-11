@@ -4,16 +4,13 @@
 	import ShowInfo from '$lib/components/ShowInfo.svelte';
 	import type { PageState } from '$lib/typescript/types';
 	import { upload_file } from '$lib/typescript/upload';
-	import { onMount } from 'svelte';
-	import { select_option } from 'svelte/internal';
 	import FileSelect from '../lib/components/FileSelect.svelte';
 	import StepCounter from '../lib/components/StepCounter.svelte';
-
 
 	function umami_event(name: string, data: Record<string, string>) {
 		const umami = window.umami;
 		if (umami !== undefined) {
-			umami(name, data);
+			umami.trackEvent(name, data);
 		}
 	}
 
@@ -34,9 +31,21 @@
 		}
 		[, send_promise] = upload_file(page_state.file, page_state.target, token, update_progress);
 		send_promise.then(() => {
+			umami_event('file_upload_succes', {
+				type: 'file_upload',
+				success: 'true',
+				filename: page_state.file?.name ?? 'null',
+				size: page_state.file?.size.toString() ?? 'null'
+			});
 			page_state.step = 4;
 		});
 		send_promise.catch(() => {
+			umami_event('file_upload_fail', {
+				type: 'file_upload',
+				success: 'false',
+				filename: page_state.file?.name ?? 'null',
+				size: page_state.file?.size.toString() ?? 'null'
+			});
 			setTimeout(() => {
 				send_enabled = true;
 			}, 1000);
@@ -50,24 +59,23 @@
 			sitekey: '0x4AAAAAAADGNjylRVrnMnPc',
 			callback: function (token: string) {
 				console.log(`Challenge Success ${token}`);
+				umami_event('turnstile_success', {
+					type: 'turnstile',
+					success: 'true',
+					filename: page_state.file?.name ?? 'null',
+					size: page_state.file?.size.toString() ?? 'null'
+				});
 				upload(token);
-				umami_event('file_upload_succes', {
-									type: "file_upload",
-									success: 
-									filename: page_state.file.name,
-									size: page_state.file.size.toString()
-								});
 			},
-			"error-callback": () => {
-				umami_event('file_upload_succes', {
-									type: "file_upload",
-									success: "true",
-									filename: page_state.file.name,
-									size: page_state.file.size.toString()
-								});
+			'error-callback': () => {
+				umami_event('turnstile_fail', {
+					type: 'turnstile',
+					success: 'false',
+					filename: page_state.file?.name ?? 'null',
+					size: page_state.file?.size.toString() ?? 'null'
+				});
 			}
 		});
-		console.log(res);
 	}
 
 	function update_progress(cur_progress: number) {
@@ -109,8 +117,8 @@
 						<FileSelect
 							on:file_choose={(file) => {
 								page_state.file = file.detail.file;
-								umami_event('file_upload', {
-									type: "file_upload",
+								umami_event('file_choose', {
+									type: 'file_choose',
 									filename: page_state.file.name,
 									size: page_state.file.size.toString()
 								});
@@ -122,7 +130,7 @@
 							on:select_choose={(select) => {
 								page_state.target = select.detail.machine;
 								umami_event('machine_select', {
-									type: "machine_select",
+									type: 'machine_select',
 									machine: select.detail.machine
 								});
 								page_state.step = 3;
