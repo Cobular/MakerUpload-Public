@@ -5,8 +5,17 @@
 	import type { PageState } from '$lib/typescript/types';
 	import { upload_file } from '$lib/typescript/upload';
 	import { onMount } from 'svelte';
+	import { select_option } from 'svelte/internal';
 	import FileSelect from '../lib/components/FileSelect.svelte';
 	import StepCounter from '../lib/components/StepCounter.svelte';
+
+
+	function umami_event(name: string, data: Record<string, string>) {
+		const umami = window.umami;
+		if (umami !== undefined) {
+			umami(name, data);
+		}
+	}
 
 	let page_state: PageState = {
 		step: 1,
@@ -42,6 +51,20 @@
 			callback: function (token: string) {
 				console.log(`Challenge Success ${token}`);
 				upload(token);
+				umami_event('file_upload_succes', {
+									type: "file_upload",
+									success: 
+									filename: page_state.file.name,
+									size: page_state.file.size.toString()
+								});
+			},
+			"error-callback": () => {
+				umami_event('file_upload_succes', {
+									type: "file_upload",
+									success: "true",
+									filename: page_state.file.name,
+									size: page_state.file.size.toString()
+								});
 			}
 		});
 		console.log(res);
@@ -86,6 +109,11 @@
 						<FileSelect
 							on:file_choose={(file) => {
 								page_state.file = file.detail.file;
+								umami_event('file_upload', {
+									type: "file_upload",
+									filename: page_state.file.name,
+									size: page_state.file.size.toString()
+								});
 								page_state.step = 2;
 							}}
 						/>
@@ -93,6 +121,10 @@
 						<MachineSelect
 							on:select_choose={(select) => {
 								page_state.target = select.detail.machine;
+								umami_event('machine_select', {
+									type: "machine_select",
+									machine: select.detail.machine
+								});
 								page_state.step = 3;
 							}}
 						/>

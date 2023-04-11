@@ -3,7 +3,6 @@
 
 	import * as Sentry from '@sentry/svelte';
 	import { BrowserTracing } from '@sentry/tracing';
-	import { exclude_internal_props } from 'svelte/internal';
 
 	// Initialize the Sentry SDK here
 	Sentry.init({

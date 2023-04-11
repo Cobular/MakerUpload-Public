@@ -15,6 +15,12 @@
 	import { trace, info, error, attachConsole } from 'tauri-plugin-log-api';
 	import Main from '$lib/components/Main.svelte';
 	import type { AlertData } from '$lib/types';
+import { listen } from '@tauri-apps/api/event'
+
+
+	listen('tauri://file-drop', event => { console.log(event) })
+	listen('tauri://file-drop-hover', event => { console.log(event) })
+	listen('tauri://file-drop-cancelled', event => { console.log(event) })
 
 	const files_ref = query<DocumentData>(
 		collection(firestore, '/files') as unknown as CollectionReference<DocumentData>
