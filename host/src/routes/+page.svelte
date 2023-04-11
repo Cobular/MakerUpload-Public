@@ -15,12 +15,8 @@
 	import { trace, info, error, attachConsole } from 'tauri-plugin-log-api';
 	import Main from '$lib/components/Main.svelte';
 	import type { AlertData } from '$lib/types';
-import { listen } from '@tauri-apps/api/event'
-
-
-	listen('tauri://file-drop', event => { console.log(event) })
-	listen('tauri://file-drop-hover', event => { console.log(event) })
-	listen('tauri://file-drop-cancelled', event => { console.log(event) })
+	import { hover_store } from '$lib/stores/hover_store';
+	import DragDropOverlay from '$lib/components/DragDropOverlay.svelte';
 
 	const files_ref = query<DocumentData>(
 		collection(firestore, '/files') as unknown as CollectionReference<DocumentData>
@@ -73,6 +69,11 @@ import { listen } from '@tauri-apps/api/event'
 		};
 	});
 </script>
+
+<!-- {#if $hover_store} -->
+{#if true}
+	<DragDropOverlay />
+{/if}
 
 <Main files={$files_store} />
 <FloatingQr />

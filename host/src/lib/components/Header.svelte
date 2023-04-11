@@ -18,7 +18,7 @@
 			</button>
 		{/await}
 		<div class="ml-auto">
-			<button class="btn mr-4" on:click={async () => open(await downloadDir())}>
+			<button class="btn mr-4 btn-success" on:click={async () => open(await downloadDir())}>
 				Open Folder
 			</button>
 			<label class="input-group">
