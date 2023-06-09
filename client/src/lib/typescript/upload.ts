@@ -1,30 +1,14 @@
 import type { TargetMachine } from 'makersync-common/types';
 import { BASE_URL } from './base_url';
-import { returnFileSize } from './file_check';
 import axios from 'axios';
+import type { OnProgress } from './types';
 
-interface FileData {
-	name: string;
-	size: number;
-	readable_size: string;
-}
-
-export type OnProgress = (progress: number) => void;
-export type OnFinished = (result: string) => void;
-export type OnError = (result: string) => void;
-
-export function upload_file(
+export async function upload_file(
 	file: File,
 	target_machine: TargetMachine,
 	token: string,
 	on_progress: OnProgress
-): [FileData, Promise<unknown>] {
-	const file_data: FileData = {
-		name: file.name,
-		size: file.size,
-		readable_size: returnFileSize(file.size)
-	};
-
+): Promise<void> {
 	const dest_url =
 		BASE_URL +
 		new URLSearchParams({
@@ -33,14 +17,16 @@ export function upload_file(
 			token: token
 		});
 
+		
+
 	const totalBytes = file.size;
 
-	const put_req = axios.put(dest_url, file, {
+	await axios.put(dest_url, file, {
 		onUploadProgress: (progressEvent) => {
 			const progress = Math.round((progressEvent.loaded / totalBytes) * 100);
+			console.log(progress);
+			
 			on_progress(progress);
 		}
 	})
-
-	return [file_data, put_req];
 }

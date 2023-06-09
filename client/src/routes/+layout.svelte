@@ -1,5 +1,5 @@
 <script>
-	import { dev } from '$app/environment';
+	import { browser, dev } from '$app/environment';
 	import '../app.postcss';
 
 	import * as Sentry from '@sentry/svelte';
