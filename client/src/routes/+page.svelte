@@ -22,8 +22,6 @@
 	let turnstile_element: HTMLDivElement;
 </script>
 
-<p>{JSON.stringify($state.value)}</p>
-<p>{JSON.stringify($state.context)}</p>
 <div class="hero min-h-screen bg-base-300">
 	<div class="hero-content text-center">
 		<div>
