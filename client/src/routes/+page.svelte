@@ -33,7 +33,7 @@
 					data-tip="Just pick multiple files when prompted, or drop them in the box!"
 				>
 					<p
-						class="font-minecraft text-xs bg-yellow-100 drop-shadow-md rounded-lg p-3 py-2 pb-4 pt-2 z-10 animate-bounce"
+						class="font-minecraft text-xs bg-yellow-100 drop-shadow-md rounded-lg p-3 py-2 pb-4 pt-2 z-10 animate-bounce text-slate-900						"
 					>
 						Now with<br /><span class="sm:text-sm">multi-file uploads!</span>
 					</p>
