@@ -23,11 +23,21 @@
 </script>
 
 <div class="hero min-h-screen bg-base-300">
-	<div class="hero-content text-center">
+	<div class="hero-content text-center overflow-clip sm:overflow-visible">
 		<div>
 			<h1 class="text-5xl font-bold">MakerSync</h1>
-			<p class="py-6">Send files to makerspace computers!</p>
-			<div class="card bg-base-100 shadow-xl m-5">
+			<p class="py-6 pb-10">Send files to makerspace computers!</p>
+			<div class="card bg-base-100 shadow-xl m-5 relative">
+				<div
+					class="absolute top-0 right-0 translate-x-6 sm:translate-x-1/3 translate-y-[-70%] sm:translate-y-[-50%] rotate-12  tooltip tooltip-top"
+					data-tip="Just pick multiple files when prompted, or drop them in the box!"
+				>
+					<p
+						class="font-minecraft text-xs bg-yellow-100 drop-shadow-md rounded-lg p-3 py-2 pb-4 pt-2 z-10 animate-bounce"
+					>
+						Now with<br /><span class="sm:text-sm">multi-file uploads!</span>
+					</p>
+				</div>
 				<div class="card-body max-w-sm w-screen gap-4">
 					<StepCounter
 						state={$state}

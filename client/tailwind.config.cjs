@@ -4,7 +4,12 @@ const config = {
 	content: ['./src/**/*.{html,js,svelte,ts}'],
 
 	theme: {
-		extend: {}
+		extend: {
+			fontFamily: {
+				script: ['Caveat', 'cursive'],
+				minecraft: ['minecraft', 'sans-serif'],
+			}
+		}
 	},
 
 	plugins: [daisyui],
