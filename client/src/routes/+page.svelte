@@ -12,10 +12,10 @@
 	let { state, send } = useMachine(file_upload_machine, {
 		logger: (...args) => {
 			if (dev) {
-				console.log(...args);
+				console.log(args[0], {metadata: args[1]});
 			} else if (args[0] !== undefined && args[1] !== undefined && typeof args[1] === 'string') {
 				// Log with umami
-				umami_event(args[1], args[0]);
+				umami_event(args[0], {metadata: args[1]});
 			}
 		}
 	});
