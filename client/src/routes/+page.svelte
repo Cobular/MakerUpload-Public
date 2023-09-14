@@ -9,13 +9,16 @@
 	import StepCounter from '../lib/components/StepCounter.svelte';
 	import { useMachine } from '@xstate/svelte';
 
+	import { SignedIn, SignedOut, userStore } from 'sveltefire';
+	import { signInAnonymously, signOut } from 'firebase/auth';
+
 	let { state, send } = useMachine(file_upload_machine, {
 		logger: (...args) => {
 			if (dev) {
-				console.log(args[0], {metadata: args[1]});
+				console.log(args[0], { metadata: args[1] });
 			} else if (args[0] !== undefined && args[1] !== undefined && typeof args[1] === 'string') {
 				// Log with umami
-				umami_event(args[0], {metadata: args[1]});
+				umami_event(args[0], { metadata: args[1] });
 			}
 		}
 	});
@@ -23,6 +26,7 @@
 </script>
 
 <div class="hero min-h-screen bg-base-300">
+
 	<div class="hero-content text-center overflow-clip sm:overflow-visible">
 		<div>
 			<h1 class="text-5xl font-bold">MakerSync</h1>

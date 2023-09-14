@@ -1,59 +1,5 @@
-import { Env } from "../..";
-import { RouteHandler } from "../../types";
-import { v4 as uuidv4 } from "uuid";
-import { FirestoreInterface } from "makersync-common/firestore";
-import { IsTargetMachine } from "makersync-common/types";
-import { validate_turnstile } from "../../utils/turnstile";
-
-const PUT = (async (
-  url: URL,
-  request: Request,
-  env: Env,
-  ctx: ExecutionContext
-): Promise<Response> => {
-  const target_machine = url.searchParams.get("target_machine");
-  const file_name = url.searchParams.get("file_name");
-  const token = url.searchParams.get("token");
-  const ip = request.headers.get("CF-Connecting-IP");
-
-  // Validations
-  if (!IsTargetMachine(target_machine))
-    return new Response("Invalid target_machine", { status: 400 });
-
-  if (request.body === null) return new Response("No body", { status: 400 });
-
-  let turnstile_success = await validate_turnstile(env.TURNSTILE_KEY, token, ip);
-  if (!turnstile_success) {
-    return new Response(`Captcha failed`, { status: 400 });
-  }
-
-  // Do da upload
-  const firestore = await FirestoreInterface.New(
-    env.FIREBASE_PROJECT_ID,
-    env.FIREBASE_SERVICE_ACCT_JSON
-  );
-
-  const uuid = uuidv4();
-  console.log("UUID", uuid);
-  try {
-    const resp = await env.FILE_CACHE_BUCKET.put(uuid, request.body);
-    const firestore_resp = await firestore.addDocumentInCollection("files", {
-      download_url: `https://cf-worker.cobular.workers.dev/files?uuid=${uuid}`,
-      creation_time: new Date(),
-      target_machine: target_machine,
-      uid: uuid,
-      name: file_name !== null ? file_name : "no_name",
-    });
-
-    const response = new Response(`Upload success`, { status: 200 });
-    response.headers.set("Access-Control-Allow-Origin", "*");
-
-    return response;
-  } catch (e) {
-    console.error(e);
-    return new Response(`Upload failed\n${e}`, { status: 500 });
-  }
-}) satisfies RouteHandler;
+import { Env } from "../../..";
+import { RouteHandler } from "../../../types";
 
 const GET = (async (
   url: URL,
@@ -119,15 +65,13 @@ const OPTIONS = (async (
   return response;
 }) satisfies RouteHandler;
 
-export const Files = (async (
+export const Manage = (async (
   url: URL,
   request: Request,
   env: Env,
   ctx: ExecutionContext
 ): Promise<Response> => {
   switch (request.method) {
-    case "PUT":
-      return PUT(url, request, env, ctx);
     case "GET":
       return GET(url, request, env, ctx);
     case "DELETE":
@@ -135,10 +79,10 @@ export const Files = (async (
     case "OPTIONS":
       return OPTIONS(url, request, env, ctx);
     default:
-      return new Response(`${request.method} is not allowed.`, {
+      return new Response(`${request.method} is not allowed for url ${request.url}.`, {
         status: 405,
         headers: {
-          Allow: "PUT",
+          Allow: "GET, DELETE, OPTIONS",
         },
       });
   }

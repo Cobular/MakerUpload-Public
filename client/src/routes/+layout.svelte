@@ -1,9 +1,12 @@
 <script>
+	import { fbAuth, firestore } from '$lib/typescript/firebase';
 	import { browser, dev } from '$app/environment';
 	import '../app.postcss';
 
 	import * as Sentry from '@sentry/svelte';
 	import { BrowserTracing } from '@sentry/tracing';
+
+	import { FirebaseApp } from 'sveltefire';
 
 	// Initialize the Sentry SDK here
 	if (!dev) {
@@ -21,4 +24,6 @@
 	}
 </script>
 
-<slot />
+<FirebaseApp auth={fbAuth} {firestore}>
+	<slot />
+</FirebaseApp>

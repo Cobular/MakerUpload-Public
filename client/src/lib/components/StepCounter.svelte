@@ -2,6 +2,8 @@
 	import { createEventDispatcher } from 'svelte';
 	import type { Typegen0 } from '$lib/typescript/states.typegen';
 	import type { SendPropType, StatePropType } from '$lib/typescript/states';
+	import { userStore } from 'sveltefire';
+	import { fbAuth } from '$lib/typescript/firebase';
 
 	export let state: StatePropType;
 	export let send: SendPropType;
@@ -14,6 +16,8 @@
 
 	let can_click_target = false;
 	$: can_click_target = state.can('BACK_TO_SELECT_MACHINE');
+
+	const user = userStore(fbAuth);
 </script>
 
 <ul class="steps">
